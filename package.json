@@ -1,0 +1,36 @@
+{
+  "name": "vite-template-solid",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chart.js": "^2.9.37",
+    "autoprefixer": "^10.4.8",
+    "path": "^0.12.7",
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.1.7",
+    "typescript": "^4.7.4",
+    "vite": "^3.0.0",
+    "vite-plugin-solid": "^2.3.0",
+    "vite-tsconfig-paths": "^3.5.0"
+  },
+  "dependencies": {
+    "@solid-primitives/context": "^0.1.0",
+    "@solid-primitives/i18n": "^1.1.1",
+    "chart.js": "^2.9.4",
+    "chartjs-plugin-labels": "^1.1.0",
+    "polished": "^4.2.2",
+    "solid-app-router": "^0.4.2",
+    "solid-icons": "^1.0.1",
+    "solid-js": "^1.5.2",
+    "solid-meta": "^0.28.1",
+    "solid-transition-group": "^0.0.10",
+    "solid-utils": "^0.8.1"
+  }
+}
