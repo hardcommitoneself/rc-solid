@@ -52,8 +52,9 @@ const StylizedButton = (props: ButtonProps) => {
       } ${
         disabled || loading
           ? `cursor-not-allowed ${
-              varaint === "outline" &&
-              "hover:!bg-none hover:!border-solid hover:!mx-0 "
+              varaint === "outline"
+                ? "hover:!bg-none hover:!border-solid hover:!mx-0 "
+                : "bg-none !bg-site-400 !border-site-350"
             }`
           : " " +
             colorSchemes[color].hoverBgColor +
