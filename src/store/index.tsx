@@ -10,6 +10,7 @@ import { JackpotProvider } from './jackpot';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const langs: { [lang: string]: () => Promise<any> } = {
   en: async () => (await import('../../lang/en/en')).default(),
+  ru: async () => (await import('../../lang/ru/ru')).default(),
 };
 
 // Some browsers does not map correctly to some locale code
