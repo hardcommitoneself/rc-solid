@@ -42,6 +42,10 @@ export const routes: RouteDefinition[] = [
             {
                 path: '/coinflip',
                 component: lazy(() => import('./pages/Coinflip')),
+            },
+            {
+                path: '/*all',
+                component: lazy(() => import('./pages/404'))
             }
         ]
     }
