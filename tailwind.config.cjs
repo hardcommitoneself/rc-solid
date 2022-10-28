@@ -19,6 +19,13 @@ module.exports = {
         error: {
           100: "#761c19",
         },
+        gradient: {
+          orange1: "#a32301",
+          orange2: "#fc3c01",
+        },
+      },
+      padding: {
+        4.5: "1.125rem",
       },
     },
   },

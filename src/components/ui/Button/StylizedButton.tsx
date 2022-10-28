@@ -19,17 +19,17 @@ const colorSchemes = {
     activeBgColor: "active:bg-none active:!bg-lime-400",
   },
   orange: {
-    bgColor: "bg-gradient-to-t from-[#a32301] to-[#fc3c01]",
+    bgColor: "bg-gradient-to-t from-gradient-orange1 to-gradient-orange2",
     borderColor: "border-orange-500",
-    hoverBgColor: "hover:from-[#fc3c01] hover:to-[#a32301]",
-    activeBgColor: "active:from-[#a32301] active:to-[#fc3c01]",
+    hoverBgColor: "hover:from-gradient-orange2 hover:to-gradient-orange1",
+    activeBgColor: "active:from-gradient-orange1 active:to-gradient-orange2",
   },
 };
 
 const variants = {
   solid: "",
   outline:
-    "border-2 border-gray-500 !bg-none hover:!bg-gradient-to-b hover:border-hidden hover:mx-[2px]",
+    "border-2 border-gray-500 !bg-none hover:!bg-gradient-to-b hover:border-none hover:px-4.5",
 };
 
 const StylizedButton = (props: ButtonProps) => {
@@ -38,32 +38,33 @@ const StylizedButton = (props: ButtonProps) => {
     varaint = "solid",
     disabled = false,
     loading = false,
+    children,
     ...rest
   } = props;
 
   return (
     <button
-      class={`flex items-center select-none px-4 h-11 ${
-        colorSchemes[color].bgColor
-      } border-b-2 ${
-        colorSchemes[color].borderColor
-      } rounded-bl rounded-tr w-full text-sm text-white font-semibold max-w-fit uppercase tracking-wide ${
-        variants[varaint]
-      } ${
-        disabled || loading
-          ? `cursor-not-allowed ${
-              varaint === "outline"
-                ? "hover:!bg-none hover:!border-solid hover:!mx-0 "
-                : "bg-none !bg-site-400 !border-site-350"
-            }`
-          : " " +
-            colorSchemes[color].hoverBgColor +
-            " " +
-            colorSchemes[color].activeBgColor
-      }`}
+      class="relative flex items-center select-none px-4 h-11 border-b-2 rounded-bl rounded-tr w-full text-sm text-white font-semibold max-w-fit uppercase tracking-wide"
+      classList={{
+        [colorSchemes[color].bgColor]: true,
+        [colorSchemes[color].borderColor]: true,
+        [variants[varaint]]: true,
+        [colorSchemes[color].hoverBgColor]: !(disabled || loading),
+        [colorSchemes[color].activeBgColor]: !(disabled || loading),
+        "cursor-not-allowed hover:!bg-none hover:!border-solid hover:!px-4":
+          (disabled || loading) && varaint === "outline",
+        "cursor-not-allowed bg-none !bg-site-400 !border-site-350":
+          (disabled || loading) && varaint === "solid",
+        "opacity-30": loading,
+      }}
       {...rest}
     >
-      {loading ? <Loading /> : props.children}
+      {children}
+      {loading && (
+        <div class="absolute z-10 flex items-center justify-center inset-0">
+          <Loading />
+        </div>
+      )}
     </button>
   );
 };
