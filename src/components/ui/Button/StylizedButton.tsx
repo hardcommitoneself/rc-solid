@@ -2,11 +2,11 @@ import type { JSX } from "solid-js";
 import Loading from "../../util/Loading";
 
 type ColorSchemeType = "green" | "orange";
-type VaraintType = "solid" | "outline";
+type VaraiantType = "solid" | "outline";
 
 interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: ColorSchemeType;
-  varaint?: VaraintType;
+  variant?: VaraiantType;
   disabled?: boolean;
   loading?: boolean;
 }
@@ -35,7 +35,7 @@ const variants = {
 const StylizedButton = (props: ButtonProps) => {
   const {
     color = "green",
-    varaint = "solid",
+    variant = "solid",
     disabled = false,
     loading = false,
     children,
@@ -48,13 +48,13 @@ const StylizedButton = (props: ButtonProps) => {
       classList={{
         [colorSchemes[color].bgColor]: true,
         [colorSchemes[color].borderColor]: true,
-        [variants[varaint]]: true,
+        [variants[variant]]: true,
         [colorSchemes[color].hoverBgColor]: !(disabled || loading),
         [colorSchemes[color].activeBgColor]: !(disabled || loading),
         "cursor-not-allowed hover:!bg-none hover:!border-solid hover:!px-4":
-          (disabled || loading) && varaint === "outline",
+          (disabled || loading) && variant === "outline",
         "cursor-not-allowed bg-none !bg-site-400 !border-site-350":
-          (disabled || loading) && varaint === "solid",
+          (disabled || loading) && variant === "solid",
         "opacity-30": loading,
       }}
       {...rest}
