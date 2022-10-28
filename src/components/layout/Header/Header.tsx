@@ -4,7 +4,7 @@ import { Profile, UserBalance } from "~components/layout";
 import logo from '../../../assets/logo-01.png';
 
 const Header = () => {
-    const [t] = useI18n();
+    const [t, { locale }] = useI18n();
 
     return (
         <header class="flex-shrink-0 h-28 bg-site-900 overflow-hidden flex flex-col">
@@ -24,22 +24,22 @@ const Header = () => {
                         <img src={logo} class="object-contain" />
                     </a>
                     <nav class="ml-4 h-full flex">
-                        <NavLink href="/" class="flex flex-col justify-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
+                        <NavLink href={`${locale()}/`} class="flex flex-col justify-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
                             <span class="mt-1 text-gray-300 capitalize text-xl font-medium group-hover:text-gray-100 transition-colors">{t('global.high_rollers')}</span>
                             <span class="text-primary text-xs font-semibold tracking-wider mt-0.5">$1,235.56</span>
                         </NavLink>
-                        <NavLink href="/low-ballers" class="flex flex-col justify-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
+                        <NavLink href={`${locale()}/low-ballers`} class="flex flex-col justify-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
                             <span class="mt-1 text-gray-300 capitalize text-xl font-medium group-hover:text-gray-100 transition-colors">{t('global.low_ballers')}</span>
                             <span class="text-primary text-xs font-semibold tracking-wider mt-0.5">$1,235.56</span>
                         </NavLink>
-                        <NavLink href="/coinflip" class="flex flex-col justify-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
+                        <NavLink href={`${locale()}/coinflip`} class="flex flex-col justify-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
                             <span class="mt-1 text-gray-300 capitalize text-xl font-medium group-hover:text-gray-100 transition-colors">{t('global.coinflip')}</span>
                             <span class="text-primary text-xs font-semibold tracking-wider mt-0.5">$1,235.56</span>
                         </NavLink>
-                        <NavLink href="/roulette" class="flex flex-col justify-center items-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
+                        <NavLink href={`${locale()}/roulette`} class="flex flex-col justify-center items-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
                             <span class="text-gray-300 capitalize text-xl font-medium group-hover:text-gray-100 transition-colors">{t('global.roulette')}</span>
                         </NavLink>
-                        <NavLink href="/crash" class="flex flex-col justify-center items-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
+                        <NavLink href={`${locale()}/crash`} class="flex flex-col justify-center items-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
                             <span class="text-gray-300 capitalize text-xl font-medium group-hover:text-gray-100 transition-colors">{t('global.crash')}</span>
                         </NavLink>
                     </nav>

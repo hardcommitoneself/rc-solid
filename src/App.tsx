@@ -1,17 +1,14 @@
-import { Suspense, createSignal, createResource, Switch, Match, createReaction } from 'solid-js';
+import { Suspense, createSignal, createResource, Switch, Match, createReaction, Component, lazy } from 'solid-js';
 import { useRoutes, Router } from 'solid-app-router';
 import { MetaProvider } from 'solid-meta';
-import AppContextProvider from '~store';
-import { routes } from './routes';
 
-import logo from './logo.svg';
-import styles from './App.module.css';
-import { useI18n } from '@solid-primitives/i18n';
 import { Header } from '~components/layout';
 import { Chat } from '~components/chat';
-import { createEffect } from 'solid-js';
+
+import AppContextProvider from '~store';
 import { useChat } from './store/chat';
 import { CompactSteamItem, ItemDatabase, SteamItem } from './store/items';
+import { routes } from './routes';
 
 async function fetchData() {
   const response = await fetch(`https://rustchance.com/items.json`)
@@ -19,16 +16,15 @@ async function fetchData() {
   return data;
 }
 
-const Main = () => {
-  const Routes = useRoutes(routes);
-
+const Main: Component = () => {
+  const AppRoutes = useRoutes(routes);
   const { opened } = useChat()!;
 
   return (
     <div class="h-full flex overflow-hidden">
       <main class="w-full overflow-hidden transition-[margin-right]" classList={{ "mr-[var(--sidebar-width)]": opened() }}>
         <Suspense>
-          <Routes />
+          <AppRoutes />
         </Suspense>
       </main>
       <Chat />
