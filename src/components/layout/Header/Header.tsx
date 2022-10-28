@@ -42,6 +42,9 @@ const Header = () => {
                         <NavLink href={`${locale()}/crash`} class="flex flex-col justify-center items-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
                             <span class="text-gray-300 capitalize text-xl font-medium group-hover:text-gray-100 transition-colors">{t('global.crash')}</span>
                         </NavLink>
+                        <NavLink href={`${locale()}/ui`} class="flex flex-col justify-center items-center tracking-wide px-4 group" activeClass="bg-site-600 bg-opacity-30" end>
+                            <span class="text-gray-300 capitalize text-xl font-medium group-hover:text-gray-100 transition-colors">UI</span>
+                        </NavLink>
                     </nav>
                     {/*<UserBalance />*/}
                 </div>

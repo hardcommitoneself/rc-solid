@@ -1,5 +1,5 @@
 import { Suspense, createSignal, createResource, Switch, Match, createReaction, Component, lazy } from 'solid-js';
-import { useRoutes, Router } from 'solid-app-router';
+import { useRoutes, Router, Route, Routes } from 'solid-app-router';
 import { MetaProvider } from 'solid-meta';
 
 import { Header } from '~components/layout';
@@ -9,6 +9,8 @@ import AppContextProvider from '~store';
 import { useChat } from './store/chat';
 import { CompactSteamItem, ItemDatabase, SteamItem } from './store/items';
 import { routes } from './routes';
+
+import UI from "./pages/UI";
 
 async function fetchData() {
   const response = await fetch(`https://rustchance.com/items.json`)
