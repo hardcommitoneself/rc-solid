@@ -36,6 +36,11 @@ module.exports = {
       padding: {
         4.5: "1.125rem",
       },
+      backgroundImage: {
+        "item-bg-f15840": "url('/src/assets/images/item/f15840.png')",
+        "item-bg-a7ec2e": "url('/src/assets/images/item/a7ec2e.png')",
+        "item-bg-35a3f1": "url('/src/assets/images/item/35a3f1.png')",
+      },
     },
   },
 };

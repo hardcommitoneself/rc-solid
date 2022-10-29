@@ -1,20 +1,28 @@
-import { Suspense, createSignal, createResource, Switch, Match, createReaction, Component, lazy } from 'solid-js';
-import { useRoutes, Router, Route, Routes } from 'solid-app-router';
-import { MetaProvider } from 'solid-meta';
+import {
+  Suspense,
+  createSignal,
+  createResource,
+  Switch,
+  Match,
+  createReaction,
+  Component,
+  lazy,
+} from "solid-js";
+import { useRoutes, Router, Route, Routes } from "solid-app-router";
+import { MetaProvider } from "solid-meta";
 
-import { Header } from '~components/layout';
-import { Chat } from '~components/chat';
+import { Header } from "~components/layout";
+import { Chat } from "~components/chat";
 
-import AppContextProvider from '~store';
-import { useChat } from './store/chat';
-import { CompactSteamItem, ItemDatabase, SteamItem } from './store/items';
-import { routes } from './routes';
-
-import UI from "./pages/UI";
+import AppContextProvider from "~store";
+import { useChat } from "./store/chat";
+import { CompactSteamItem, ItemDatabase, SteamItem } from "./store/items";
+import { routes } from "./routes";
 
 async function fetchData() {
-  const response = await fetch(`https://rustchance.com/items.json`)
+  const response = await fetch(`https://rustchance.com/items.json`);
   const data = await response.json();
+  console.log(data);
   return data;
 }
 
@@ -24,7 +32,10 @@ const Main: Component = () => {
 
   return (
     <div class="h-full flex overflow-hidden">
-      <main class="w-full overflow-hidden transition-[margin-right]" classList={{ "mr-[var(--sidebar-width)]": opened() }}>
+      <main
+        class="w-full overflow-hidden transition-[margin-right]"
+        classList={{ "mr-[var(--sidebar-width)]": opened() }}
+      >
         <Suspense>
           <AppRoutes />
         </Suspense>
@@ -32,7 +43,7 @@ const Main: Component = () => {
       <Chat />
     </div>
   );
-}
+};
 
 const App = () => {
   const [items] = createResource<CompactSteamItem[]>(fetchData);
@@ -45,7 +56,7 @@ const App = () => {
           image: item.m,
           name: item.n,
           price: item.p,
-          color: item.c
+          color: item.c,
         });
       }
     }
