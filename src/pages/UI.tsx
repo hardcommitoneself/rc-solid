@@ -20,7 +20,7 @@ const UI: Component = () => {
         <div class="flex gap-5">
           <StylizedButton color="green">Green Button</StylizedButton>
           <StylizedButton color="orange">Orange Button</StylizedButton>
-          <StylizedButton color="orange" varaint="outline">
+          <StylizedButton color="orange" variant="outline">
             Outline Button
           </StylizedButton>
           <StylizedButton color="green" disabled>
@@ -32,7 +32,7 @@ const UI: Component = () => {
           <StylizedButton color="orange" loading>
             Loading Button
           </StylizedButton>
-          <StylizedButton color="orange" varaint="outline" loading>
+          <StylizedButton color="orange" variant="outline" loading>
             Loading Button
           </StylizedButton>
         </div>

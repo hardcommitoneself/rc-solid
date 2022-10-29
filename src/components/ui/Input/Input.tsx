@@ -22,9 +22,12 @@ const Input = (props: InputProps) => {
           <div class="absolute flex items-center left-2 h-full">{leftEle}</div>
         )}
         <input
-          class={`text-white w-full border border-site-600 bg-site-900 transition p-2 outline-none text-sm ${
-            !isError && "focus:border-site-500"
-          } ${!!leftEle && "pl-7"} ${!!isError && "border-error-100"} `}
+          class="text-white w-full border border-site-600 bg-site-900 transition p-2 outline-none text-sm rounded"
+          classList={{
+            "focus:border-site-500": !isError,
+            "pl-7": !!leftEle,
+            "border-error-100": !!isError,
+          }}
           {...rest}
         ></input>
       </div>

@@ -24,7 +24,7 @@ const Tab = (props: TabProps) => {
     window.addEventListener("resize", setTabPosition);
 
     return () => window.removeEventListener("resize", setTabPosition);
-  }, [props.currentTab()]);
+  });
 
   return (
     <div class="relative">
@@ -33,11 +33,11 @@ const Tab = (props: TabProps) => {
         {tabs.map((tab, index) => (
           <a
             ref={(el) => setRefs((refs) => [...refs, el])}
-            class={`p-3 cursor-pointer transition font-medium select-none duration-100 ${
-              currentTab() === index
-                ? "text-secondary"
-                : "text-white hover:text-white/50"
-            }`}
+            class="p-3 cursor-pointer transition font-medium select-none duration-100"
+            classList={{
+              "text-secondary": currentTab() === index,
+              "text-white hover:text-white/50": currentTab() !== index,
+            }}
             onClick={() => handleClick(index)}
           >
             {tab}
@@ -47,7 +47,7 @@ const Tab = (props: TabProps) => {
 
       {/* tab slider */}
       <span
-        class="absolute bottom-0 block h-[2px] bg-secondary transition-all duration-500"
+        class="absolute bottom-0 block h-0.5 bg-secondary transition-all duration-500"
         style={{ left: underlineLeft() + "px", width: underlineWidth() + "px" }}
       />
     </div>
