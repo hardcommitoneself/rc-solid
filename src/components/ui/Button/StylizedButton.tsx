@@ -19,10 +19,11 @@ const colorSchemes = {
     activeBgColor: "active:bg-none active:!bg-lime-400",
   },
   orange: {
-    bgColor: "bg-gradient-to-t from-gradient-orange1 to-gradient-orange2",
+    bgColor: "bg-gradient-to-t from-gradient-orange-100 to-gradient-orange-200",
     borderColor: "border-orange-500",
-    hoverBgColor: "hover:from-gradient-orange2 hover:to-gradient-orange1",
-    activeBgColor: "active:from-gradient-orange1 active:to-gradient-orange2",
+    hoverBgColor: "hover:from-gradient-orange-200 hover:to-gradient-orange-100",
+    activeBgColor:
+      "active:from-gradient-orange-100 active:to-gradient-orange-200",
   },
 };
 
