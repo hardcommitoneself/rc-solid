@@ -5,6 +5,7 @@ import { StylizedButton } from "~components/ui/Button";
 import { Tab } from "~components/ui/Tab";
 import { Input } from "~components/ui/Input";
 import { Coin } from "../components/util/svg";
+import { CountdownCircleProgress } from "~components/ui/Progress";
 
 const tabs = ["Statistics", "Returns", "High Rollers"];
 
@@ -62,6 +63,17 @@ const UI: Component = () => {
             placeholder="Input with label"
             isError
           />
+        </div>
+      </div>
+
+      {/* Circle Progress */}
+      <div class="flex flex-col gap-5">
+        <span class="text-xl font-medium">Circle Count down progress bar</span>
+        <div class="flex items-center gap-5">
+          <CountdownCircleProgress size="md" duration={10} variant="orange" />
+          <CountdownCircleProgress size="lg" duration={20} variant="orange" />
+          <CountdownCircleProgress size="md" duration={10} variant="green" />
+          <CountdownCircleProgress size="lg" duration={40} variant="green" />
         </div>
       </div>
     </div>
