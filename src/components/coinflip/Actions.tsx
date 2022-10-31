@@ -4,7 +4,7 @@ import { Setting } from "~components/util/svg";
 const Actions = () => {
   return (
     <div class="flex items-center gap-2.5">
-      <StylizedButton color="orange" varaint="outline">
+      <StylizedButton color="orange" variant="outline">
         History
       </StylizedButton>
       <StylizedButton color="green">CREATE A COINFLIP</StylizedButton>

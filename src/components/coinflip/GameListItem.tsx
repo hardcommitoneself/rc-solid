@@ -6,6 +6,7 @@ import {
   Match,
   Show,
   Switch,
+  onCleanup,
 } from "solid-js";
 import { GameDataType } from "src/pages/Coinflip";
 import { getItemModel, SiteItem, SteamItem } from "src/store/items";
@@ -58,24 +59,78 @@ const ItemBGImages = {
 const GameListItem = (props: GameListItemProps) => {
   const { data } = props;
   const [items, setItems] = createSignal<SiteItem[]>([]);
+  const [maxLen, setMaxLen] = createSignal(10);
+  const [restLen, setRestLen] = createSignal(0);
+  const [wWidth, setWWidth] = createSignal(0);
+  const [wHeight, setWHeight] = createSignal(0);
 
   createEffect(() => {
     setItems(
-      [...(data.blue_side?.items || []), ...(data.red_side?.items || [])].slice(
-        0,
-        5
-      )
+      [...(data.blue_side?.items || []), ...(data.red_side?.items || [])]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, maxLen())
     );
+  });
+
+  const setWindowSize = () => {
+    setWWidth(window.innerWidth);
+    setWHeight(window.innerHeight);
+
+    if (window.innerWidth > 1600) {
+      setMaxLen(6);
+      setRestLen(
+        (data.blue_side?.items || []).length +
+          (data.red_side?.items || []).length -
+          6
+      );
+      return;
+    }
+    if (window.innerWidth > 1280) {
+      setMaxLen(4);
+      setRestLen(
+        (data.blue_side?.items || []).length +
+          (data.red_side?.items || []).length -
+          4
+      );
+      return;
+    }
+    if (window.innerWidth > 960) {
+      setMaxLen(2);
+      setRestLen(
+        (data.blue_side?.items || []).length +
+          (data.red_side?.items || []).length -
+          2
+      );
+      return;
+    }
+    if (window.innerWidth < 960) {
+      setMaxLen(2);
+      setRestLen(
+        (data.blue_side?.items || []).length +
+          (data.red_side?.items || []).length -
+          2
+      );
+      return;
+    }
+  };
+
+  createEffect(() => {
+    setWindowSize();
+    window.addEventListener("resize", setWindowSize);
   });
 
   const mappedItemsList = mapArray(items, (item) => {
     return <Item id={item[0]} price={item[1]} />;
   });
 
+  onCleanup(async () => {
+    window.removeEventListener("resize", setWindowSize);
+  });
+
   return (
     <div class="flex gap-5 p-2.5 h-[90px] bg-site-900 rounded">
       {/* left side */}
-      <div class="w-3/5 flex items-center gap-14">
+      <div class="w-2/3 flex items-center gap-8">
         {/* avatar of blue and red */}
         <div class="w-40 flex items-center justify-center">
           <Switch>
@@ -122,13 +177,28 @@ const GameListItem = (props: GameListItemProps) => {
         </div>
 
         {/* items */}
-        <div class="grid md:grid-cols-4 xl:grid-cols-6 gap-2.5">
+        <div
+          class="grid gap-2.5"
+          classList={{
+            "grid-cols-7": maxLen() === 6 && restLen() > 0,
+            "grid-cols-6": maxLen() === 6 && restLen() <= 0,
+            "grid-cols-5": maxLen() === 4 && restLen() > 0,
+            "grid-cols-4": maxLen() === 4 && restLen() <= 0,
+            "grid-cols-3": maxLen() === 2 && restLen() > 0,
+            "grid-cols-2": maxLen() === 2 && restLen() <= 0,
+          }}
+        >
           {mappedItemsList}
+          <Show when={restLen() > 0}>
+            <div class="flex items-center justify-center uppercase text-xs text-site-335">
+              +{restLen()} Items
+            </div>
+          </Show>
         </div>
       </div>
 
       {/* right side */}
-      <div class="flex items-center justify-between w-2/5">
+      <div class="flex items-center justify-between w-1/3">
         {/* price and status */}
         <div class="flex gap-10">
           <PriceCard
@@ -248,6 +318,7 @@ const PriceCard = (props: PriceCardProps) => {
 
 const Item = (props: ItemProps) => {
   const { id, price } = props;
+  const [isTooltipShow, setIsTooltipShow] = createSignal(false);
 
   const item = getItemModel(id);
   const itemBG = ItemBGImages[item?.color as ItemBackgroundImageType];
@@ -255,10 +326,24 @@ const Item = (props: ItemProps) => {
   return (
     <div
       class={`flex items-center justify-center min-w-[90px] h-[70px] rounded ${itemBG}`}
+      onMouseEnter={() => setIsTooltipShow(true)}
+      onMouseLeave={() => setIsTooltipShow(false)}
     >
       <div class="w-full h-ful flex flex-col items-center justify-center">
         <img src={`${ITEM_IMAGE_URL}/${item?.image}/80fx50f`} />
         <span class="text-xs leading-3">${price / 20}</span>
+      </div>
+
+      {/* tooltip */}
+      <div
+        class="inline-block absolute z-10 px-2 py-1 text-xs font-medium text-white bg-site-550 rounded shadow-sm transition duration-500 tooltip dark:bg-gray-500"
+        classList={{
+          "opacity-100 -translate-y-14": isTooltipShow(),
+          "opacity-0 -translate-y-12": !isTooltipShow(),
+        }}
+      >
+        {item?.name}
+        <div class="absolute left-[calc(50%_-_2px)] -bottom-1 bg-inherit w-2 h-2 invisible before:visible before:content-[''] before:rotate-45 before:bg-inherit before:w-2 before:h-2 before:absolute"></div>
       </div>
     </div>
   );

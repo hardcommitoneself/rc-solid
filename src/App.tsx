@@ -34,7 +34,7 @@ const Main: Component = () => {
     <div class="h-full flex overflow-hidden">
       <main
         class="w-full overflow-hidden transition-[margin-right]"
-        classList={{ "mr-[var(--sidebar-width)]": opened() }}
+        classList={{ "xl:mr-[var(--sidebar-width)]": opened() }}
       >
         <Suspense>
           <AppRoutes />
