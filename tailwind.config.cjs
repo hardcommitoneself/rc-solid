@@ -3,6 +3,9 @@ module.exports = {
   mode: "jit",
   theme: {
     extend: {
+      screens: {
+        "md-lg": "960px",
+      },
       colors: {
         site: {
           900: "#0c0f1a",

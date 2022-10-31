@@ -31,9 +31,9 @@ const Main: Component = () => {
   const { opened } = useChat()!;
 
   return (
-    <div class="h-full flex overflow-hidden">
+    <div class="h-full flex">
       <main
-        class="w-full overflow-hidden transition-[margin-right]"
+        class="w-full transition-[margin-right]"
         classList={{ "xl:mr-[var(--sidebar-width)]": opened() }}
       >
         <Suspense>
@@ -66,7 +66,7 @@ const App = () => {
 
   return (
     <MetaProvider>
-      <main class="flex h-full flex-col overflow-hidden">
+      <main class="flex h-full flex-col">
         <Switch>
           <Match when={items.loading}>
             <span>loading</span>

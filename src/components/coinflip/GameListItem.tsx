@@ -103,12 +103,21 @@ const GameListItem = (props: GameListItemProps) => {
       );
       return;
     }
-    if (window.innerWidth < 960) {
-      setMaxLen(2);
+    if (window.innerWidth < 800) {
+      setMaxLen(4);
       setRestLen(
         (data.blue_side?.items || []).length +
           (data.red_side?.items || []).length -
-          2
+          4
+      );
+      return;
+    }
+    if (window.innerWidth < 960) {
+      setMaxLen(6);
+      setRestLen(
+        (data.blue_side?.items || []).length +
+          (data.red_side?.items || []).length -
+          6
       );
       return;
     }
@@ -128,9 +137,9 @@ const GameListItem = (props: GameListItemProps) => {
   });
 
   return (
-    <div class="flex gap-5 p-2.5 h-[90px] bg-site-900 rounded">
+    <div class="flex flex-col md-lg:flex-row gap-5 p-2.5 md-lg:h-[90px] bg-site-900 rounded">
       {/* left side */}
-      <div class="w-2/3 flex items-center gap-8">
+      <div class="md-lg:w-2/3 flex flex-col md-lg:flex-row md-lg:items-center gap-8">
         {/* avatar of blue and red */}
         <div class="w-40 flex items-center justify-center">
           <Switch>
@@ -178,7 +187,7 @@ const GameListItem = (props: GameListItemProps) => {
 
         {/* items */}
         <div
-          class="grid gap-2.5"
+          class="flex md-lg:grid gap-2.5"
           classList={{
             "grid-cols-7": maxLen() === 6 && restLen() > 0,
             "grid-cols-6": maxLen() === 6 && restLen() <= 0,
@@ -198,9 +207,10 @@ const GameListItem = (props: GameListItemProps) => {
       </div>
 
       {/* right side */}
-      <div class="flex items-center justify-between w-1/3">
+      <div class="flex flex-col gap-5 md-lg:gap-0 md-lg:flex-row items-center justify-between md-lg:w-1/3">
         {/* price and status */}
-        <div class="flex gap-10">
+        <div class="grid grid-cols-2 w-full md-lg:flex gap-10">
+          {/* price card */}
           <PriceCard
             totalValue={174.32}
             estFrom={173.21}
@@ -208,25 +218,31 @@ const GameListItem = (props: GameListItemProps) => {
             isFinished={data.status === "finished"}
           />
           {/* status */}
-          <Show when={data.status === "finished"}>
-            <Avatar
-              class="ml-5"
-              id={data.red_side?.avatar}
-              hasCoinBadge={true}
-              side="red"
-              pos="tl"
-            />
-          </Show>
-          <Show when={data.status === "waiting"}>
-            <CountdownCircleProgress
-              size="md"
-              variant="orange"
-              duration={100}
-            />
-          </Show>
-          <Show when={data.status === "joined"}>
-            <CountdownCircleProgress size="md" variant="green" duration={100} />
-          </Show>
+          <div class="flex items-center justify-center">
+            <Show when={data.status === "finished"}>
+              <Avatar
+                class="ml-5"
+                id={data.red_side?.avatar}
+                hasCoinBadge={true}
+                side="red"
+                pos="tl"
+              />
+            </Show>
+            <Show when={data.status === "waiting"}>
+              <CountdownCircleProgress
+                size="md"
+                variant="orange"
+                duration={100}
+              />
+            </Show>
+            <Show when={data.status === "joined"}>
+              <CountdownCircleProgress
+                size="md"
+                variant="green"
+                duration={100}
+              />
+            </Show>
+          </div>
         </div>
         {/* actions */}
         <div class="flex gap-2">

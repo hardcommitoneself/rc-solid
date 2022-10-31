@@ -20,7 +20,7 @@ const Status = () => {
   });
 
   return (
-    <div class="flex gap-10">
+    <div class="flex gap-3 md:gap-10">
       <StatusCard label="Total Value" value={stats().totalValue} unit="$" />
       <StatusCard
         label="Joinable Games"
