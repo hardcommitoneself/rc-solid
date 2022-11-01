@@ -69,8 +69,6 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
 
     c?.scale(scale, scale);
 
-    console.log(scale, canvas?.width, canvas?.height);
-
     const width = canvas?.width || 0;
     const height = canvas?.height || 0;
 
@@ -89,7 +87,6 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
     setTimeout(() => (isEnd = true), duration * 1000);
 
     const arcMove = () => {
-      console.log("arc");
       !isEnd && requestAnimationFrame(arcMove);
       if (c) {
         degree -= 360 / (duration * fps);

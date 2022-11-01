@@ -10,12 +10,34 @@ import {
 } from "solid-js";
 import { GameDataType } from "src/pages/Coinflip";
 import { getItemModel, SiteItem, SteamItem } from "src/store/items";
-import { StylizedButton } from "src/components/ui/Button";
-import { CountdownCircleProgress } from "src/components/ui/Progress";
+import {
+  StylizedButton,
+  ColorSchemeType,
+  VariantType,
+} from "src/components/ui/Button";
+import {
+  CountdownCircleProgress,
+  CountdownCircleProgressSizeType,
+  CountdownCircleProgressVariantType,
+} from "src/components/ui/Progress";
 
-type SideType = "blue" | "red";
-type CoinType = "blue" | "red";
-type CoinPosType = "tl" | "tr" | "bl" | "br";
+enum SideType {
+  blue,
+  red,
+}
+
+enum CoinType {
+  blue,
+  red,
+}
+
+enum CoinPosType {
+  tl,
+  tr,
+  bl,
+  br,
+}
+
 type ItemBackgroundImageType = "f15840" | "a7ec2e" | "35a3f1";
 
 interface GameListItemProps {
@@ -149,8 +171,8 @@ const GameListItem = (props: GameListItemProps) => {
                   <Avatar
                     id={data.blue_side?.avatar}
                     hasCoinBadge={true}
-                    side="blue"
-                    pos="br"
+                    side={SideType.blue}
+                    pos={CoinPosType.br}
                   />
                   <img
                     src="data:image/png;base64,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"
@@ -160,8 +182,8 @@ const GameListItem = (props: GameListItemProps) => {
                   <Avatar
                     id={data.red_side?.avatar}
                     hasCoinBadge={true}
-                    side="red"
-                    pos="tl"
+                    side={SideType.red}
+                    pos={CoinPosType.tl}
                   />
                 </div>
               </Show>
@@ -171,13 +193,13 @@ const GameListItem = (props: GameListItemProps) => {
                 <Match when={!!data.blue_side}>
                   <>
                     <Avatar id={data.blue_side?.avatar} hasCoinBadge={false} />
-                    <Coin type="red" />
+                    <Coin type={CoinType.red} />
                   </>
                 </Match>
                 <Match when={!!data.red_side}>
                   <>
                     <Avatar id={data.red_side?.avatar} hasCoinBadge={false} />
-                    <Coin type="blue" />
+                    <Coin type={CoinType.blue} />
                   </>
                 </Match>
               </Switch>
@@ -224,21 +246,21 @@ const GameListItem = (props: GameListItemProps) => {
                 class="ml-5"
                 id={data.red_side?.avatar}
                 hasCoinBadge={true}
-                side="red"
-                pos="tl"
+                side={SideType.red}
+                pos={CoinPosType.tl}
               />
             </Show>
             <Show when={data.status === "waiting"}>
               <CountdownCircleProgress
-                size="md"
-                variant="orange"
+                size={CountdownCircleProgressSizeType.md}
+                variant={CountdownCircleProgressVariantType.orange}
                 duration={100}
               />
             </Show>
             <Show when={data.status === "joined"}>
               <CountdownCircleProgress
-                size="md"
-                variant="green"
+                size={CountdownCircleProgressSizeType.md}
+                variant={CountdownCircleProgressVariantType.green}
                 duration={100}
               />
             </Show>
@@ -249,7 +271,10 @@ const GameListItem = (props: GameListItemProps) => {
           <Show when={data.status === "joinable"}>
             <StylizedButton>JOIN</StylizedButton>
           </Show>
-          <StylizedButton color="orange" variant="outline">
+          <StylizedButton
+            colorScheme={ColorSchemeType.orange}
+            variant={VariantType.outline}
+          >
             VIEW
           </StylizedButton>
         </div>
@@ -260,10 +285,11 @@ const GameListItem = (props: GameListItemProps) => {
 
 const Avatar = (props: AvatarProps) => {
   const { id, hasCoinBadge, side, pos, ...rest } = props;
+
   return (
     <div
+      class="relative w-14 h-14 z-10"
       classList={{
-        "relative w-14 h-14 z-10": true,
         [rest.class as string]: true,
       }}
     >
@@ -274,19 +300,19 @@ const Avatar = (props: AvatarProps) => {
         height={56}
       />
 
-      <Show when={side}>
+      <Show when={side != undefined}>
         <div
           class="absolute w-5 h-5"
           classList={{
-            "top-2 -left-2": pos === "tl",
-            "top-2 -right-2": pos === "tr",
-            "bottom-2 -left-2": pos === "bl",
-            "bottom-2 -right-2": pos === "br",
+            "top-2 -left-2": pos === CoinPosType.tl,
+            "top-2 -right-2": pos === CoinPosType.tr,
+            "bottom-2 -left-2": pos === CoinPosType.bl,
+            "bottom-2 -right-2": pos === CoinPosType.br,
           }}
         >
           <img
             src={`${
-              side === "red"
+              side === SideType.red
                 ? "https://rustchance.com/static/media/red_side.1d169258.png"
                 : "https://rustchance.com/static/media/blue_side.167bac47.png"
             }`}
@@ -306,7 +332,7 @@ const Coin = (props: CoinProps) => {
     <div class="-translate-x-3 w-14 h-14 rounded-full overflow-hidden">
       <img
         src={`${
-          type === "red"
+          type === CoinType.red
             ? "https://rustchance.com/static/media/red_side.1d169258.png"
             : "https://rustchance.com/static/media/blue_side.167bac47.png"
         }`}

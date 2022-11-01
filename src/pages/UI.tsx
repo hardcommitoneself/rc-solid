@@ -1,7 +1,11 @@
 import { Component, createSignal } from "solid-js";
 
 // components
-import { StylizedButton } from "~components/ui/Button";
+import {
+  StylizedButton,
+  ColorSchemeType,
+  VariantType,
+} from "~components/ui/Button";
 import { Tab } from "~components/ui/Tab";
 import { Input } from "~components/ui/Input";
 import { Coin } from "../components/util/svg";
@@ -23,21 +27,32 @@ const UI: Component = () => {
         <span class="text-xl font-medium">Buttons</span>
 
         <div class="flex gap-5">
-          <StylizedButton color="green">Green Button</StylizedButton>
-          <StylizedButton color="orange">Orange Button</StylizedButton>
-          <StylizedButton color="orange" variant="outline">
+          <StylizedButton colorScheme={ColorSchemeType.green}>
+            Green Button
+          </StylizedButton>
+          <StylizedButton colorScheme={ColorSchemeType.orange}>
+            Orange Button
+          </StylizedButton>
+          <StylizedButton
+            colorScheme={ColorSchemeType.orange}
+            variant={VariantType.outline}
+          >
             Outline Button
           </StylizedButton>
-          <StylizedButton color="green" disabled>
+          <StylizedButton colorScheme={ColorSchemeType.green} disabled>
             Disabled Button
           </StylizedButton>
-          <StylizedButton color="green" loading>
+          <StylizedButton colorScheme={ColorSchemeType.green} loading>
             Loading Button
           </StylizedButton>
-          <StylizedButton color="orange" loading>
+          <StylizedButton colorScheme={ColorSchemeType.orange} loading>
             Loading Button
           </StylizedButton>
-          <StylizedButton color="orange" variant="outline" loading>
+          <StylizedButton
+            colorScheme={ColorSchemeType.orange}
+            variant={VariantType.outline}
+            loading
+          >
             Loading Button
           </StylizedButton>
         </div>
