@@ -6,6 +6,9 @@ module.exports = {
       screens: {
         "md-lg": "960px",
       },
+      width: {
+        15: "3.75rem",
+      },
       colors: {
         site: {
           900: "#0c0f1a",
