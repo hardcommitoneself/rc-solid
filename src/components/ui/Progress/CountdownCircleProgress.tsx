@@ -1,7 +1,13 @@
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, createSignal, onMount } from "solid-js";
 
-type CountdownCircleProgressVariantType = "green" | "orange";
-type CountdownCircleProgressSizeType = "md" | "lg";
+export enum CountdownCircleProgressVariantType {
+  green,
+  orange,
+}
+export enum CountdownCircleProgressSizeType {
+  md,
+  lg,
+}
 
 interface CountdownCircleProgressProps {
   duration: number;
@@ -10,14 +16,14 @@ interface CountdownCircleProgressProps {
 }
 
 const variants = {
-  orange: {
+  [CountdownCircleProgressVariantType.orange]: {
     stroke: {
       100: "#ea580c",
       200: "#dc2626",
     },
     textColor: "text-orange-700",
   },
-  green: {
+  [CountdownCircleProgressVariantType.green]: {
     stroke: {
       100: "#3f6212",
       200: "#65a30d",
@@ -27,21 +33,19 @@ const variants = {
 };
 
 const sizes = {
-  md: {
+  [CountdownCircleProgressSizeType.md]: {
     lineWidth: 4,
     radius: 20,
     width: 60,
     height: 60,
-    text: "text-sm",
-    wrapper: "w-[60px] h-[60px]",
+    text: "20px Arial",
   },
-  lg: {
+  [CountdownCircleProgressSizeType.lg]: {
     lineWidth: 8,
     radius: 50,
-    width: 140,
-    height: 140,
-    text: "!text-2xl !text-white font-bold",
-    wrapper: "w-[140px] h-[140px]",
+    width: 144,
+    height: 144,
+    text: "30px Arial",
   },
 };
 
@@ -50,87 +54,98 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
   const [canvasRef, setCanvasRef] = createSignal<HTMLCanvasElement>();
   const [percentRef, setPercentRef] = createSignal<HTMLSpanElement>();
 
-  createEffect(() => {
-    const c = canvasRef()?.getContext("2d");
+  onMount(() => {
+    const canvas = canvasRef();
+    const c = canvas?.getContext("2d");
     const p = percentRef();
+    let globalId = -1;
 
-    const width = canvasRef()?.width || 0;
-    const height = canvasRef()?.height || 0;
+    const scale = window?.devicePixelRatio;
+
+    if (canvas) {
+      canvas.width = canvas?.width * scale;
+      canvas.height = canvas?.height * scale;
+    }
+
+    c?.scale(scale, scale);
+
+    console.log(scale, canvas?.width, canvas?.height);
+
+    const width = canvas?.width || 0;
+    const height = canvas?.height || 0;
 
     const posX = width / 2;
     const posY = height / 2;
-    const fps = 5;
+    const fps = 60;
 
     if (c) {
       c.lineCap = "round";
     }
 
+    let degree = 360;
+    let time = 0;
+    let isEnd = false;
+
+    setTimeout(() => (isEnd = true), duration * 1000);
+
     const arcMove = () => {
-      let degree = 360;
-      let arcInterval = -1;
-      let time = (duration * 1000) / fps;
-      arcInterval = setInterval(() => {
-        degree -= 360 / ((duration * 1000) / fps);
-        c?.clearRect(0, 0, width, height);
-        if (p) {
-          p.innerHTML = Math.ceil(time / 200).toString();
-        }
-        time--;
+      console.log("arc");
+      !isEnd && requestAnimationFrame(arcMove);
+      if (c) {
+        degree -= 360 / (duration * fps);
+        c.clearRect(0, 0, width, height);
+        const timingCountText = Math.ceil(duration - time / 60).toString();
+        c.font = sizes[size].text;
+        c.fillStyle = variants[variant].stroke[200];
+        c.textAlign = "center";
+        c.fillText(timingCountText, posX, posY + 7);
+        time++;
 
-        if (c) {
-          c.beginPath();
-          c.arc(
-            posX,
-            posY,
-            sizes[size].radius,
-            (Math.PI / 180) * 270,
-            (Math.PI / 180) * (270 + 360),
-            false
-          );
-          c.strokeStyle = variants[variant].stroke[100];
-          c.lineWidth = sizes[size].lineWidth;
-          c.stroke();
+        c.beginPath();
+        c.arc(
+          posX,
+          posY,
+          sizes[size].radius,
+          (Math.PI / 180) * 270,
+          (Math.PI / 180) * (270 + 360),
+          false
+        );
+        c.strokeStyle = variants[variant].stroke[100];
+        c.lineWidth = sizes[size].lineWidth;
+        c.stroke();
 
-          c.beginPath();
-          c.strokeStyle = variants[variant].stroke[200];
-          c.lineWidth = sizes[size].lineWidth;
-          c.arc(
-            posX,
-            posY,
-            sizes[size].radius,
-            (Math.PI / 180) * 270,
-            (Math.PI / 180) * (270 + degree),
-            false
-          );
-          c.stroke();
-          if (time == 0) {
-            clearInterval(arcInterval);
-            if (p) p.innerHTML = "";
-          }
-        }
-      }, fps);
+        c.beginPath();
+        c.strokeStyle = variants[variant].stroke[200];
+        c.lineWidth = sizes[size].lineWidth;
+        c.arc(
+          posX,
+          posY,
+          sizes[size].radius,
+          (Math.PI / 180) * 270,
+          (Math.PI / 180) * (270 + degree),
+          false
+        );
+        c.stroke();
+      }
     };
 
     arcMove();
   });
 
   return (
-    <div class="relative" classList={{ [sizes[size].wrapper]: true }}>
+    <div
+      class="relative"
+      classList={{
+        "w-15 h-15": size === CountdownCircleProgressSizeType.md,
+        "w-36 h-36": size === CountdownCircleProgressSizeType.lg,
+      }}
+    >
       <canvas
         ref={(ele) => setCanvasRef(ele)}
         id="canvas"
         width={sizes[size].width}
         height={sizes[size].height}
       ></canvas>
-      <span
-        ref={(ele) => setPercentRef(ele)}
-        id="percent"
-        class="block absolute left-1/2 top-1/2 leading-3 -translate-x-1/2 -translate-y-1/2"
-        classList={{
-          [variants[variant].textColor]: true,
-          [sizes[size].text]: true,
-        }}
-      ></span>
     </div>
   );
 };
