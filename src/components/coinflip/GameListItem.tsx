@@ -2,11 +2,11 @@ import {
   createEffect,
   createSignal,
   JSX,
-  mapArray,
   Match,
   Show,
   Switch,
   onCleanup,
+  For,
 } from "solid-js";
 import { GameDataType } from "src/pages/Coinflip";
 import { getItemModel, SiteItem, SteamItem } from "src/store/items";
@@ -150,10 +150,6 @@ const GameListItem = (props: GameListItemProps) => {
     window.addEventListener("resize", setWindowSize);
   });
 
-  const mappedItemsList = mapArray(items, (item) => {
-    return <Item id={item[0]} price={item[1]} />;
-  });
-
   onCleanup(async () => {
     window.removeEventListener("resize", setWindowSize);
   });
@@ -219,7 +215,9 @@ const GameListItem = (props: GameListItemProps) => {
             "grid-cols-2": maxLen() === 2 && restLen() <= 0,
           }}
         >
-          {mappedItemsList}
+          <For each={items()} fallback={<div>Loading...</div>}>
+            {(item, index) => <Item id={item[0]} price={item[1]} />}
+          </For>
           <Show when={restLen() > 0}>
             <div class="flex items-center justify-center uppercase text-xs text-site-335">
               +{restLen()} Items
