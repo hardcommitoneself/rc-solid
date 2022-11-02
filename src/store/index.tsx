@@ -1,23 +1,32 @@
-import { ParentComponent, createContext, createEffect, createResource, useContext, createSignal, onMount } from 'solid-js';
+import {
+  ParentComponent,
+  createContext,
+  createEffect,
+  createResource,
+  useContext,
+  createSignal,
+  onMount,
+} from "solid-js";
 import { createStore } from "solid-js/store";
-import { Meta, Title } from 'solid-meta';
-import { useLocation } from 'solid-app-router';
-import { createI18nContext, I18nContext } from '@solid-primitives/i18n';
-import { ChatProvider } from './chat';
-import { UserProvider } from './user';
-import { JackpotProvider } from './jackpot';
+import { Meta, Title } from "solid-meta";
+import { useLocation } from "solid-app-router";
+import { createI18nContext, I18nContext } from "@solid-primitives/i18n";
+import { ChatProvider } from "./chat";
+import { UserProvider } from "./user";
+import { JackpotProvider } from "./jackpot";
+import { CoinFlipProvider } from "./coinflip";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const langs: { [lang: string]: () => Promise<any> } = {
-  en: async () => (await import('../../lang/en/en')).default(),
-  ru: async () => (await import('../../lang/ru/ru')).default(),
+  en: async () => (await import("../../lang/en/en")).default(),
+  ru: async () => (await import("../../lang/ru/ru")).default(),
 };
 
 // Some browsers does not map correctly to some locale code
 // due to offering multiple locale code for similar language (e.g. tl and fil)
 // This object maps it to correct `langs` key
 const langAliases: Record<string, string> = {
-  fil: 'tl',
+  fil: "tl",
 };
 
 type DataParams = {
@@ -26,7 +35,7 @@ type DataParams = {
 
 const AppContextProvider: ParentComponent = (props) => {
   /* i18n */
-  const i18n = createI18nContext({}, ('en') as string);
+  const i18n = createI18nContext({}, "en" as string);
   const [t, { add, locale }] = i18n;
   const params = (): DataParams => {
     const locale = i18n[1].locale();
@@ -51,13 +60,15 @@ const AppContextProvider: ParentComponent = (props) => {
   return (
     <UserProvider>
       <JackpotProvider>
-        <ChatProvider>
-          <I18nContext.Provider value={i18n}>
-            <Title>fdgdfg</Title>
-            <Meta name="lang" content={locale()} />
-            {props.children}
-          </I18nContext.Provider>
-        </ChatProvider>
+        <CoinFlipProvider>
+          <ChatProvider>
+            <I18nContext.Provider value={i18n}>
+              <Title>fdgdfg</Title>
+              <Meta name="lang" content={locale()} />
+              {props.children}
+            </I18nContext.Provider>
+          </ChatProvider>
+        </CoinFlipProvider>
       </JackpotProvider>
     </UserProvider>
   );

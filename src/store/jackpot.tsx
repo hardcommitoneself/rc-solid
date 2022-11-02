@@ -23,99 +23,110 @@ import { CompactProfile } from "./user";
 */
 
 type JackpotDeposit = {
-    id: number;
-    profile: CompactProfile;
-    color: string;
-    value: number;
-    items: SiteItem[];
-}
+  id: number;
+  profile: CompactProfile;
+  color: string;
+  value: number;
+  items: SiteItem[];
+};
 
 type JackpotGame = {
-    id: number;
-    deposits: JackpotDeposit[];
+  id: number;
+  deposits: JackpotDeposit[];
 };
 
 type JackpotState = {
-    current: JackpotGame;
-    history: JackpotGame[];
-}
+  current: JackpotGame;
+  history: JackpotGame[];
+};
 
 type Actions = {
-    newDeposit: (deposit: JackpotDeposit) => void;
-}
+  newDeposit: (deposit: JackpotDeposit) => void;
+};
 
-const [JackpotProvider, useJackpotContext] = createStore<JackpotState, Actions, {}>({
-    state: () => ({
-        current: {
-            id: 34,
-            deposits: [
-                {
-                    id: 5785241,
-                    profile: {
-                        id: 601460,
-                        username: "? rustchance.com",
-                        avatar: "d8e1659736128951135d6e74a99e8705de799c96",
-                        steamid: "76561199347663394",
-                        level: 34,
-                        rank: 0
-                    },
-                    color: "rgb(171,200,11)",
-                    value: 675,
-                    items: [[2605,370],[2378,154],[1024,151]]
-                },
-                {
-                    id: 5785241,
-                    profile: {
-                        id: 353453,
-                        username: "poseidon ⚡#****GG",
-                        avatar: "6684adef23e4c39ecc8c4fee8e0ad4b957a9a04b",
-                        steamid: "76561199347663394",
-                        level: 89,
-                        rank: 0
-                    },
-                    color: "rgb(119,91,168)",
-                    value: 675,
-                    items: [[2605,370],[1024,151]]
-                },
-                {
-                    id: 5785241,
-                    profile: {
-                        id: 601460,
-                        username: "cheeKy9 rustchance.com",
-                        avatar: "61ceebcc24dd5409e1acdfb3f2417fffa42eccb9",
-                        steamid: "76561199347663394",
-                        level: 34,
-                        rank: 0
-                    },
-                    color: "rgb(50,72,245)",
-                    value: 675,
-                    items: [[2605,370]]
-                },
-                {
-                    id: 534534,
-                    profile: {
-                        id: 1,
-                        username: "foigjodifgj",
-                        avatar: "6293098db568fafd849388410fdb075fd19e577a",
-                        steamid: "76561199347663394",
-                        level: 109,
-                        rank: 0
-                    },
-                    color: "rgb(203,32,25)",
-                    value: 370,
-                    items: [[378,370]]
-                }
-            ]
+const [JackpotProvider, useJackpotContext] = createStore<
+  JackpotState,
+  Actions,
+  {}
+>({
+  state: () => ({
+    current: {
+      id: 34,
+      deposits: [
+        {
+          id: 5785241,
+          profile: {
+            id: 601460,
+            username: "? rustchance.com",
+            avatar: "d8e1659736128951135d6e74a99e8705de799c96",
+            steamid: "76561199347663394",
+            level: 34,
+            rank: 0,
+          },
+          color: "rgb(171,200,11)",
+          value: 675,
+          items: [
+            [2605, 370],
+            [2378, 154],
+            [1024, 151],
+          ],
         },
-        history: []
-    }),
+        {
+          id: 5785241,
+          profile: {
+            id: 353453,
+            username: "poseidon ⚡#****GG",
+            avatar: "6684adef23e4c39ecc8c4fee8e0ad4b957a9a04b",
+            steamid: "76561199347663394",
+            level: 89,
+            rank: 0,
+          },
+          color: "rgb(119,91,168)",
+          value: 675,
+          items: [
+            [2605, 370],
+            [1024, 151],
+          ],
+        },
+        {
+          id: 5785241,
+          profile: {
+            id: 601460,
+            username: "cheeKy9 rustchance.com",
+            avatar: "61ceebcc24dd5409e1acdfb3f2417fffa42eccb9",
+            steamid: "76561199347663394",
+            level: 34,
+            rank: 0,
+          },
+          color: "rgb(50,72,245)",
+          value: 675,
+          items: [[2605, 370]],
+        },
+        {
+          id: 534534,
+          profile: {
+            id: 1,
+            username: "foigjodifgj",
+            avatar: "6293098db568fafd849388410fdb075fd19e577a",
+            steamid: "76561199347663394",
+            level: 109,
+            rank: 0,
+          },
+          color: "rgb(203,32,25)",
+          value: 370,
+          items: [[378, 370]],
+        },
+      ],
+    },
+    history: [],
+  }),
 
-    actions: (set) => ({
-        newDeposit(deposit: JackpotDeposit) {
-            set("current", "deposits", deposits => [deposit, ...deposits]);
-        }
-    })
+  actions: (set) => ({
+    newDeposit(deposit: JackpotDeposit) {
+      set("current", "deposits", (deposits) => [deposit, ...deposits]);
+    },
+  }),
 });
 
 export { JackpotProvider, useJackpotContext };
-export type { JackpotDeposit, JackpotGame }
+export type { JackpotDeposit, JackpotGame };

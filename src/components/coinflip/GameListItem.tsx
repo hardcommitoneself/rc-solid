@@ -8,10 +8,10 @@ import {
   onCleanup,
   For,
 } from "solid-js";
-import { GameDataType, CoinFlipGameStatus } from "src/pages/Coinflip";
 import { getItemModel, SiteItem, SteamItem } from "src/store/items";
 import { StylizedButton } from "src/components/ui/Button";
 import { CountdownCircleProgress } from "src/components/ui/Progress";
+import { CoinFlipGame, CoinFlipGameStatus } from "src/store/coinflip";
 
 enum SideType {
   blue,
@@ -33,7 +33,7 @@ enum CoinPosType {
 type ItemBackgroundImageType = "f15840" | "a7ec2e" | "35a3f1";
 
 interface GameListItemProps {
-  data: GameDataType;
+  data: CoinFlipGame;
 }
 
 interface AvatarProps extends JSX.HTMLAttributes<HTMLDivElement> {
