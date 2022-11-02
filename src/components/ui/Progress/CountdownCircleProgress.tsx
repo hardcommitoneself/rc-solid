@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onMount } from "solid-js";
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 type CountdownCircleProgressVariantType = "orange" | "green";
 type CountdownCircleProgressSizeType = "md" | "lg";
@@ -46,13 +46,10 @@ const sizes = {
 const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
   const { duration, variant, size } = props;
   const [canvasRef, setCanvasRef] = createSignal<HTMLCanvasElement>();
-  const [percentRef, setPercentRef] = createSignal<HTMLSpanElement>();
 
   onMount(() => {
     const canvas = canvasRef();
     const c = canvas?.getContext("2d");
-    const p = percentRef();
-    let globalId = -1;
 
     const scale = window?.devicePixelRatio;
 
@@ -68,15 +65,12 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
 
     const posX = width / 2;
     const posY = height / 2;
-    const fps = 60;
 
     if (c) {
       c.lineCap = "round";
     }
 
     let degree = 360;
-    let time = 0;
-    let isEnd = false;
 
     const date = new Date();
     let startTimestamp = date.getTime();
@@ -84,9 +78,17 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
     let endTimestamp = date.getTime();
     let diff = endTimestamp - startTimestamp;
 
+    let current_timestamp;
+
+    let frame: number;
+
     const arcMove = () => {
-      const current_timestamp = new Date().getTime();
-      !(current_timestamp > endTimestamp) && requestAnimationFrame(arcMove);
+      current_timestamp = new Date().getTime();
+
+      if (current_timestamp > endTimestamp) {
+        cancelAnimationFrame(frame);
+      }
+
       if (c) {
         degree = 360 * ((endTimestamp - current_timestamp) / diff);
         c.clearRect(0, 0, width, height);
@@ -124,9 +126,13 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
         );
         c.stroke();
       }
+
+      frame = requestAnimationFrame(arcMove);
     };
 
-    arcMove();
+    frame = requestAnimationFrame(arcMove);
+
+    onCleanup(() => cancelAnimationFrame(frame));
   });
 
   return (
