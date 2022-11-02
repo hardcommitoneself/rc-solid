@@ -15,6 +15,7 @@ import { ChatProvider } from "./chat";
 import { UserProvider } from "./user";
 import { JackpotProvider } from "./jackpot";
 import { CoinFlipProvider } from "./coinflip";
+import { ModalProvider } from "./modal";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const langs: { [lang: string]: () => Promise<any> } = {
@@ -61,13 +62,15 @@ const AppContextProvider: ParentComponent = (props) => {
     <UserProvider>
       <JackpotProvider>
         <CoinFlipProvider>
-          <ChatProvider>
-            <I18nContext.Provider value={i18n}>
-              <Title>fdgdfg</Title>
-              <Meta name="lang" content={locale()} />
-              {props.children}
-            </I18nContext.Provider>
-          </ChatProvider>
+          <ModalProvider>
+            <ChatProvider>
+              <I18nContext.Provider value={i18n}>
+                <Title>fdgdfg</Title>
+                <Meta name="lang" content={locale()} />
+                {props.children}
+              </I18nContext.Provider>
+            </ChatProvider>
+          </ModalProvider>
         </CoinFlipProvider>
       </JackpotProvider>
     </UserProvider>

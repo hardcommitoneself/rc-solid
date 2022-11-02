@@ -11,7 +11,7 @@ import {
 import { useRoutes, Router, Route, Routes } from "solid-app-router";
 import { MetaProvider } from "solid-meta";
 
-import { Header } from "~components/layout";
+import { Header, ModalRoot } from "~components/layout";
 import { Chat } from "~components/chat";
 
 import AppContextProvider from "~store";
@@ -76,6 +76,7 @@ const App = () => {
               <AppContextProvider>
                 <Header />
                 <Main />
+                <ModalRoot />
               </AppContextProvider>
             </Router>
           </Match>

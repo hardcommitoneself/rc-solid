@@ -1,4 +1,5 @@
 import { Component, createSignal } from "solid-js";
+import { useModalContext } from "src/store/modal";
 
 // components
 import { StylizedButton } from "~components/ui/Button";
@@ -6,13 +7,12 @@ import { Tab } from "~components/ui/Tab";
 import { Input } from "~components/ui/Input";
 import { Coin } from "../components/util/svg";
 import { CountdownCircleProgress } from "~components/ui/Progress";
-import { Modal } from "~components/ui/Modal";
 
 const tabs = ["Statistics", "Returns", "High Rollers"];
 
 const UI: Component = () => {
   const [currentTab, setCurrentTab] = createSignal(0, { equals: false });
-  const [isOpen, setIsOpen] = createSignal(false);
+  const [state, actions] = useModalContext();
 
   return (
     <div class="flex flex-col gap-5 text-white p-5">
@@ -83,15 +83,13 @@ const UI: Component = () => {
       <div class="flex flex-col gap-5">
         <span class="text-xl font-medium">Modal</span>
         <div class="flex items-center gap-5">
-          <StylizedButton onClick={() => setIsOpen(true)}>
+          <StylizedButton
+            onClick={() =>
+              actions.displayModal({ name: "coinflip", gameid: 1 })
+            }
+          >
             Open Modal
           </StylizedButton>
-          <Modal
-            title="Create A Coinflip"
-            subtitle="Min value $0.3, Min 1 items, Max 25 items"
-            isOpen={isOpen}
-            handleClose={setIsOpen}
-          />
         </div>
       </div>
     </div>
