@@ -1,5 +1,5 @@
 import { useI18n } from "@solid-primitives/i18n";
-import { createSignal, mapArray } from "solid-js";
+import { createSignal, For } from "solid-js";
 import { Title } from "solid-meta";
 import { useUserContext } from "src/store/user";
 import { SiteItem } from "src/store/items";
@@ -200,10 +200,6 @@ const Coinflip = () => {
     },
   ]);
 
-  const mappedGameList = mapArray(games, (game) => {
-    return <GameListItem data={game}></GameListItem>;
-  });
-
   return (
     <div class="text-gray-100">
       <Title>{t("global.coinflip", {}, "Coinflip")}</Title>
@@ -220,7 +216,11 @@ const Coinflip = () => {
       </div>
 
       {/* Game List */}
-      <div class="flex flex-col gap-5 p-4">{mappedGameList}</div>
+      <div class="flex flex-col gap-5 p-4">
+        <For each={games()}>
+          {(game, index) => <GameListItem data={game}></GameListItem>}
+        </For>
+      </div>
     </div>
   );
 };
