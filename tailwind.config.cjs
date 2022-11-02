@@ -11,6 +11,7 @@ module.exports = {
       },
       colors: {
         site: {
+          950: "#07080b",
           900: "#0c0f1a",
           800: "#0F1322",
           700: "#181e2e",
@@ -24,6 +25,7 @@ module.exports = {
           335: "#858fbf",
           330: "#898989",
           300: "#979cba",
+          250: "#a0a1a1",
         },
         primary: "#cf2f01",
         secondary: "#fd3c01",

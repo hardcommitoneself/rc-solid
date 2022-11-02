@@ -6,11 +6,13 @@ import { Tab } from "~components/ui/Tab";
 import { Input } from "~components/ui/Input";
 import { Coin } from "../components/util/svg";
 import { CountdownCircleProgress } from "~components/ui/Progress";
+import { Modal } from "~components/ui/Modal";
 
 const tabs = ["Statistics", "Returns", "High Rollers"];
 
 const UI: Component = () => {
   const [currentTab, setCurrentTab] = createSignal(0, { equals: false });
+  const [isOpen, setIsOpen] = createSignal(false);
 
   return (
     <div class="flex flex-col gap-5 text-white p-5">
@@ -74,6 +76,22 @@ const UI: Component = () => {
           <CountdownCircleProgress size="lg" duration={20} variant="orange" />
           <CountdownCircleProgress size="md" duration={10} variant="green" />
           <CountdownCircleProgress size="lg" duration={40} variant="green" />
+        </div>
+      </div>
+
+      {/* Modal */}
+      <div class="flex flex-col gap-5">
+        <span class="text-xl font-medium">Modal</span>
+        <div class="flex items-center gap-5">
+          <StylizedButton onClick={() => setIsOpen(true)}>
+            Open Modal
+          </StylizedButton>
+          <Modal
+            title="Create A Coinflip"
+            subtitle="Min value $0.3, Min 1 items, Max 25 items"
+            isOpen={isOpen}
+            handleClose={setIsOpen}
+          />
         </div>
       </div>
     </div>

@@ -46,7 +46,7 @@ const StylizedButton = (props: ButtonProps) => {
 
   return (
     <button
-      class="relative inline-flex items-center justify-center whitespace-nowrap align-middle select-none px-4 h-11 border-b-2 rounded-bl rounded-tr w-full text-sm text-white font-semibold uppercase tracking-wide"
+      class="relative max-w-fit inline-flex items-center justify-center whitespace-nowrap align-middle select-none px-4 h-11 border-b-2 rounded-bl rounded-tr w-full text-sm text-white font-semibold uppercase tracking-wide"
       classList={{
         [colorSchemes[colorScheme].bgColor]: true,
         [colorSchemes[colorScheme].borderColor]: true,
