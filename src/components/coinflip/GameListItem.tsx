@@ -8,18 +8,10 @@ import {
   onCleanup,
   For,
 } from "solid-js";
-import { GameDataType } from "src/pages/Coinflip";
+import { GameDataType, CoinFlipGameStatus } from "src/pages/Coinflip";
 import { getItemModel, SiteItem, SteamItem } from "src/store/items";
-import {
-  StylizedButton,
-  ColorSchemeType,
-  VariantType,
-} from "src/components/ui/Button";
-import {
-  CountdownCircleProgress,
-  CountdownCircleProgressSizeType,
-  CountdownCircleProgressVariantType,
-} from "src/components/ui/Progress";
+import { StylizedButton } from "src/components/ui/Button";
+import { CountdownCircleProgress } from "src/components/ui/Progress";
 
 enum SideType {
   blue,
@@ -162,7 +154,7 @@ const GameListItem = (props: GameListItemProps) => {
         <div class="w-40 flex items-center justify-center">
           <Switch>
             <Match when={!!data.blue_side && !!data.red_side}>
-              <Show when={data.status !== "joinable"}>
+              <Show when={data.status !== CoinFlipGameStatus.JOINABLE}>
                 <div class="flex items-center gap-1">
                   <Avatar
                     id={data.blue_side?.avatar}
@@ -235,11 +227,11 @@ const GameListItem = (props: GameListItemProps) => {
             totalValue={174.32}
             estFrom={173.21}
             estTo={178.3}
-            isFinished={data.status === "finished"}
+            isFinished={data.status === CoinFlipGameStatus.FINISHED}
           />
           {/* status */}
           <div class="flex items-center justify-center">
-            <Show when={data.status === "finished"}>
+            <Show when={data.status === CoinFlipGameStatus.FINISHED}>
               <Avatar
                 class="ml-5"
                 id={data.red_side?.avatar}
@@ -248,17 +240,17 @@ const GameListItem = (props: GameListItemProps) => {
                 pos={CoinPosType.tl}
               />
             </Show>
-            <Show when={data.status === "waiting"}>
+            <Show when={data.status === CoinFlipGameStatus.WAITING}>
               <CountdownCircleProgress
-                size={CountdownCircleProgressSizeType.md}
-                variant={CountdownCircleProgressVariantType.orange}
+                size="md"
+                variant="orange"
                 duration={100}
               />
             </Show>
-            <Show when={data.status === "joined"}>
+            <Show when={data.status === CoinFlipGameStatus.JOINED}>
               <CountdownCircleProgress
-                size={CountdownCircleProgressSizeType.md}
-                variant={CountdownCircleProgressVariantType.green}
+                size="md"
+                variant="green"
                 duration={100}
               />
             </Show>
@@ -266,13 +258,10 @@ const GameListItem = (props: GameListItemProps) => {
         </div>
         {/* actions */}
         <div class="flex gap-2">
-          <Show when={data.status === "joinable"}>
+          <Show when={data.status === CoinFlipGameStatus.JOINABLE}>
             <StylizedButton>JOIN</StylizedButton>
           </Show>
-          <StylizedButton
-            colorScheme={ColorSchemeType.orange}
-            variant={VariantType.outline}
-          >
+          <StylizedButton colorScheme="orange" variant="outline">
             VIEW
           </StylizedButton>
         </div>

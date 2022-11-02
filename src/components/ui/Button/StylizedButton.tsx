@@ -1,15 +1,9 @@
 import type { JSX } from "solid-js";
 import Loading from "../../util/Loading";
 
-export enum ColorSchemeType {
-  green,
-  orange,
-}
+type ColorSchemeType = "orange" | "green";
 
-export enum VariantType {
-  solid,
-  outline,
-}
+type VariantType = "outline" | "solid";
 
 interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   colorScheme?: ColorSchemeType;
@@ -19,13 +13,13 @@ interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const colorSchemes = {
-  [ColorSchemeType.green]: {
+  green: {
     bgColor: "bg-gradient-to-t from-lime-700 to-lime-600",
     borderColor: "border-lime-500",
     hoverBgColor: "hover:from-lime-600 hover:to-lime-700",
     activeBgColor: "active:bg-none active:!bg-lime-400",
   },
-  [ColorSchemeType.orange]: {
+  orange: {
     bgColor: "bg-gradient-to-t from-gradient-orange-100 to-gradient-orange-200",
     borderColor: "border-orange-500",
     hoverBgColor: "hover:from-gradient-orange-200 hover:to-gradient-orange-100",
@@ -35,15 +29,15 @@ const colorSchemes = {
 };
 
 const variants = {
-  [VariantType.solid]: "",
-  [VariantType.outline]:
+  solid: "",
+  outline:
     "border-2 border-gray-500 !bg-none hover:!bg-gradient-to-b hover:border-none hover:px-4.5",
 };
 
 const StylizedButton = (props: ButtonProps) => {
   const {
-    colorScheme = ColorSchemeType.green,
-    variant = VariantType.solid,
+    colorScheme = "green",
+    variant = "solid",
     disabled = false,
     loading = false,
     children,
@@ -60,9 +54,9 @@ const StylizedButton = (props: ButtonProps) => {
         [colorSchemes[colorScheme].hoverBgColor]: !(disabled || loading),
         [colorSchemes[colorScheme].activeBgColor]: !(disabled || loading),
         "cursor-not-allowed hover:!bg-none hover:!border-solid hover:!px-4":
-          (disabled || loading) && variant === VariantType.outline,
+          (disabled || loading) && variant === "outline",
         "cursor-not-allowed bg-none !bg-site-400 !border-site-350":
-          (disabled || loading) && variant === VariantType.solid,
+          (disabled || loading) && variant === "solid",
         "opacity-30": loading,
       }}
       {...rest}

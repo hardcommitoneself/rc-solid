@@ -1,19 +1,11 @@
 import { Component, createSignal } from "solid-js";
 
 // components
-import {
-  StylizedButton,
-  ColorSchemeType,
-  VariantType,
-} from "~components/ui/Button";
+import { StylizedButton } from "~components/ui/Button";
 import { Tab } from "~components/ui/Tab";
 import { Input } from "~components/ui/Input";
 import { Coin } from "../components/util/svg";
-import {
-  CountdownCircleProgress,
-  CountdownCircleProgressVariantType,
-  CountdownCircleProgressSizeType,
-} from "~components/ui/Progress";
+import { CountdownCircleProgress } from "~components/ui/Progress";
 
 const tabs = ["Statistics", "Returns", "High Rollers"];
 
@@ -27,32 +19,21 @@ const UI: Component = () => {
         <span class="text-xl font-medium">Buttons</span>
 
         <div class="flex gap-5">
-          <StylizedButton colorScheme={ColorSchemeType.green}>
-            Green Button
-          </StylizedButton>
-          <StylizedButton colorScheme={ColorSchemeType.orange}>
-            Orange Button
-          </StylizedButton>
-          <StylizedButton
-            colorScheme={ColorSchemeType.orange}
-            variant={VariantType.outline}
-          >
+          <StylizedButton colorScheme="green">Green Button</StylizedButton>
+          <StylizedButton colorScheme="orange">Orange Button</StylizedButton>
+          <StylizedButton colorScheme="orange" variant="outline">
             Outline Button
           </StylizedButton>
-          <StylizedButton colorScheme={ColorSchemeType.green} disabled>
+          <StylizedButton colorScheme="green" disabled>
             Disabled Button
           </StylizedButton>
-          <StylizedButton colorScheme={ColorSchemeType.green} loading>
+          <StylizedButton colorScheme="green" loading>
             Loading Button
           </StylizedButton>
-          <StylizedButton colorScheme={ColorSchemeType.orange} loading>
+          <StylizedButton colorScheme="orange" loading>
             Loading Button
           </StylizedButton>
-          <StylizedButton
-            colorScheme={ColorSchemeType.orange}
-            variant={VariantType.outline}
-            loading
-          >
+          <StylizedButton colorScheme="orange" variant="outline" loading>
             Loading Button
           </StylizedButton>
         </div>
@@ -89,26 +70,10 @@ const UI: Component = () => {
       <div class="flex flex-col gap-5">
         <span class="text-xl font-medium">Circle Count down progress bar</span>
         <div class="flex items-center gap-5">
-          <CountdownCircleProgress
-            size={CountdownCircleProgressSizeType.md}
-            duration={10}
-            variant={CountdownCircleProgressVariantType.orange}
-          />
-          <CountdownCircleProgress
-            size={CountdownCircleProgressSizeType.lg}
-            duration={20}
-            variant={CountdownCircleProgressVariantType.orange}
-          />
-          <CountdownCircleProgress
-            size={CountdownCircleProgressSizeType.md}
-            duration={10}
-            variant={CountdownCircleProgressVariantType.green}
-          />
-          <CountdownCircleProgress
-            size={CountdownCircleProgressSizeType.lg}
-            duration={40}
-            variant={CountdownCircleProgressVariantType.green}
-          />
+          <CountdownCircleProgress size="md" duration={10} variant="orange" />
+          <CountdownCircleProgress size="lg" duration={20} variant="orange" />
+          <CountdownCircleProgress size="md" duration={10} variant="green" />
+          <CountdownCircleProgress size="lg" duration={40} variant="green" />
         </div>
       </div>
     </div>

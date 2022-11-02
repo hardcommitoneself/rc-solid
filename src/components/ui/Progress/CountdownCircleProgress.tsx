@@ -1,13 +1,7 @@
 import { createEffect, createSignal, onMount } from "solid-js";
 
-export enum CountdownCircleProgressVariantType {
-  green,
-  orange,
-}
-export enum CountdownCircleProgressSizeType {
-  md,
-  lg,
-}
+type CountdownCircleProgressVariantType = "orange" | "green";
+type CountdownCircleProgressSizeType = "md" | "lg";
 
 interface CountdownCircleProgressProps {
   duration: number;
@@ -16,14 +10,14 @@ interface CountdownCircleProgressProps {
 }
 
 const variants = {
-  [CountdownCircleProgressVariantType.orange]: {
+  orange: {
     stroke: {
       100: "#ea580c",
       200: "#dc2626",
     },
     textColor: "text-orange-700",
   },
-  [CountdownCircleProgressVariantType.green]: {
+  green: {
     stroke: {
       100: "#3f6212",
       200: "#65a30d",
@@ -33,14 +27,14 @@ const variants = {
 };
 
 const sizes = {
-  [CountdownCircleProgressSizeType.md]: {
+  md: {
     lineWidth: 4,
     radius: 20,
     width: 60,
     height: 60,
     text: "20px Arial",
   },
-  [CountdownCircleProgressSizeType.lg]: {
+  lg: {
     lineWidth: 8,
     radius: 50,
     width: 144,
@@ -133,8 +127,8 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
     <div
       class="relative"
       classList={{
-        "w-15 h-15": size === CountdownCircleProgressSizeType.md,
-        "w-36 h-36": size === CountdownCircleProgressSizeType.lg,
+        "w-15 h-15": size === "md",
+        "w-36 h-36": size === "lg",
       }}
     >
       <canvas

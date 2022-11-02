@@ -29,8 +29,14 @@ const Debug = () => {
   );
 };
 
-export type GameStatusType = "waiting" | "finished" | "joined" | "joinable";
-export type GameUserType = {
+export enum CoinFlipGameStatus {
+  WAITING,
+  FINISHED,
+  JOINED,
+  JOINABLE,
+}
+
+export type CoinFlipGameUserType = {
   id: number;
   avatar: string;
   level: number;
@@ -41,7 +47,7 @@ export type GameUserType = {
 
 export type GameDataType = {
   id: number;
-  status: GameStatusType;
+  status: CoinFlipGameStatus;
   timer?: number;
   diff?: number;
   hash?: string;
@@ -49,8 +55,8 @@ export type GameDataType = {
   owner?: string;
   time_left?: number;
   value?: number;
-  blue_side?: GameUserType;
-  red_side?: GameUserType;
+  blue_side?: CoinFlipGameUserType;
+  red_side?: CoinFlipGameUserType;
 };
 
 const Coinflip = () => {
@@ -58,7 +64,7 @@ const Coinflip = () => {
   const [games, setGames] = createSignal<GameDataType[]>([
     {
       id: 6709152,
-      status: "finished",
+      status: CoinFlipGameStatus.FINISHED,
       diff: 10,
       hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
       initial_value: 333,
@@ -103,7 +109,7 @@ const Coinflip = () => {
     },
     {
       id: 6709152,
-      status: "joinable",
+      status: CoinFlipGameStatus.JOINABLE,
       diff: 10,
       hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
       initial_value: 333,
@@ -126,7 +132,7 @@ const Coinflip = () => {
     },
     {
       id: 6709152,
-      status: "joined",
+      status: CoinFlipGameStatus.JOINED,
       diff: 10,
       hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
       initial_value: 333,
@@ -156,7 +162,7 @@ const Coinflip = () => {
     },
     {
       id: 6709155,
-      status: "waiting",
+      status: CoinFlipGameStatus.WAITING,
       diff: 10,
       hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
       initial_value: 333,

@@ -3,7 +3,7 @@ import { createEffect, createSelector, createSignal } from "solid-js";
 import { JackpotDeposit, useJackpotContext } from "src/store/jackpot";
 import { useUserContext } from "src/store/user";
 import { formatter, priceFormatter } from "src/utils";
-import { StylizedButton, ColorSchemeType } from "~components/ui/Button";
+import { StylizedButton } from "~components/ui/Button";
 
 type StatsData = {
   chance: number;
@@ -94,7 +94,7 @@ const Stats = (props: StatsProps) => {
           </span>
         </div>
       </div>
-      <StylizedButton colorScheme={ColorSchemeType.orange} onClick={join}>
+      <StylizedButton colorScheme="orange" onClick={join}>
         {t("jackpot.join-game")}
       </StylizedButton>
     </>
