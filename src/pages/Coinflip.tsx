@@ -1,9 +1,10 @@
 import { useI18n } from "@solid-primitives/i18n";
-import { createSignal, For, mapArray } from "solid-js";
+import { createSignal, For, createEffect, onCleanup } from "solid-js";
 import { Title } from "solid-meta";
 import { useUserContext } from "src/store/user";
 import { useCoinFlipContext } from "src/store/coinflip";
 import { SiteItem } from "src/store/items";
+import createDebounce from "@solid-primitives/debounce";
 
 // components
 import { Stats, Actions, GameListItem } from "~components/coinflip";
@@ -34,6 +35,40 @@ const Coinflip = () => {
   const [t] = useI18n();
   const [state] = useCoinFlipContext();
 
+  const [maxLen, setMaxLen] = createSignal(0);
+
+  const setWindowSize = createDebounce(() => {
+    if (window.innerWidth > 1600) {
+      setMaxLen(6);
+      return;
+    }
+    if (window.innerWidth > 1280) {
+      setMaxLen(4);
+      return;
+    }
+    if (window.innerWidth > 960) {
+      setMaxLen(2);
+      return;
+    }
+    if (window.innerWidth < 800) {
+      setMaxLen(4);
+      return;
+    }
+    if (window.innerWidth < 960) {
+      setMaxLen(6);
+      return;
+    }
+  }, 200);
+
+  createEffect(() => {
+    setWindowSize();
+    window.addEventListener("resize", setWindowSize);
+  });
+
+  onCleanup(async () => {
+    window.removeEventListener("resize", setWindowSize);
+  });
+
   return (
     <div class="text-gray-100">
       <Title>{t("global.coinflip", {}, "Coinflip")}</Title>
@@ -52,7 +87,9 @@ const Coinflip = () => {
       {/* Game List */}
       <div class="flex flex-col gap-5 p-4">
         <For each={state.current}>
-          {(game, index) => <GameListItem data={game}></GameListItem>}
+          {(game, index) => (
+            <GameListItem data={game} maxLen={maxLen}></GameListItem>
+          )}
         </For>
       </div>
     </div>
