@@ -78,19 +78,25 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
     let time = 0;
     let isEnd = false;
 
-    setTimeout(() => (isEnd = true), duration * 1000);
+    const date = new Date();
+    let startTimestamp = date.getTime();
+    date.setSeconds(date.getSeconds() + duration);
+    let endTimestamp = date.getTime();
+    let diff = endTimestamp - startTimestamp;
 
     const arcMove = () => {
-      !isEnd && requestAnimationFrame(arcMove);
+      const current_timestamp = new Date().getTime();
+      !(current_timestamp > endTimestamp) && requestAnimationFrame(arcMove);
       if (c) {
-        degree -= 360 / (duration * fps);
+        degree = 360 * ((endTimestamp - current_timestamp) / diff);
         c.clearRect(0, 0, width, height);
-        const timingCountText = Math.ceil(duration - time / 60).toString();
+        const timingCountText = Math.ceil(
+          (endTimestamp - current_timestamp) / 1000
+        ).toString();
         c.font = sizes[size].text;
         c.fillStyle = variants[variant].stroke[200];
         c.textAlign = "center";
         c.fillText(timingCountText, posX, posY + 7);
-        time++;
 
         c.beginPath();
         c.arc(
