@@ -85,10 +85,6 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
     const arcMove = () => {
       current_timestamp = new Date().getTime();
 
-      if (current_timestamp > endTimestamp) {
-        cancelAnimationFrame(frame);
-      }
-
       if (c) {
         degree = 360 * ((endTimestamp - current_timestamp) / diff);
         c.clearRect(0, 0, width, height);
@@ -128,6 +124,10 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
       }
 
       frame = requestAnimationFrame(arcMove);
+
+      if (current_timestamp > endTimestamp) {
+        cancelAnimationFrame(frame);
+      }
     };
 
     frame = requestAnimationFrame(arcMove);
