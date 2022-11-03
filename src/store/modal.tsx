@@ -4,7 +4,6 @@ import { createMutable } from "solid-js/store";
 interface CoinFlipModal {
   name: "coinflip";
   gameid: number;
-  steamid: string;
 }
 
 interface JackpotModal {
