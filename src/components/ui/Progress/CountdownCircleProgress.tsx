@@ -4,7 +4,7 @@ type CountdownCircleProgressVariantType = "orange" | "green";
 type CountdownCircleProgressSizeType = "md" | "lg";
 
 interface CountdownCircleProgressProps {
-  duration: number;
+  timer: number;
   variant: CountdownCircleProgressVariantType;
   size: CountdownCircleProgressSizeType;
 }
@@ -44,7 +44,7 @@ const sizes = {
 };
 
 const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
-  const { duration, variant, size } = props;
+  const { timer, variant, size } = props;
   const [canvasRef, setCanvasRef] = createSignal<HTMLCanvasElement>();
 
   onMount(() => {
@@ -74,8 +74,7 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
 
     const date = new Date();
     let startTimestamp = date.getTime();
-    date.setSeconds(date.getSeconds() + duration);
-    let endTimestamp = date.getTime();
+    let endTimestamp = timer * 1000;
     let diff = endTimestamp - startTimestamp;
 
     let current_timestamp;
@@ -86,7 +85,10 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
       current_timestamp = new Date().getTime();
 
       if (c) {
-        degree = 360 * ((endTimestamp - current_timestamp) / diff);
+        degree =
+          ((360 * (endTimestamp - startTimestamp)) /
+            (1000 * (variant === "orange" ? 90 : 10))) *
+          ((endTimestamp - current_timestamp) / diff);
         c.clearRect(0, 0, width, height);
         const timingCountText = Math.ceil(
           (endTimestamp - current_timestamp) / 1000
