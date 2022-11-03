@@ -24,6 +24,7 @@ module.exports = {
           340: "#7a8197",
           335: "#858fbf",
           330: "#898989",
+          320: "#8b95c7",
           300: "#979cba",
           250: "#a0a1a1",
           200: "#f4f4ff",
@@ -45,12 +46,19 @@ module.exports = {
         },
       },
       padding: {
+        0.25: "0.0625rem",
         4.5: "1.125rem",
       },
       backgroundImage: {
         "item-bg-f15840": "url('/src/assets/images/item/f15840.png')",
         "item-bg-a7ec2e": "url('/src/assets/images/item/a7ec2e.png')",
         "item-bg-35a3f1": "url('/src/assets/images/item/35a3f1.png')",
+        "coin-red": "url('/src/assets/images/coin/red_side.png')",
+        "coin-blue": "url('/src/assets/images/coin/blue_side.png')",
+      },
+      boxShadow: {
+        win: "0 0 25px 5px rgb(0 255 0 / 50%)",
+        lose: "0 0 25px 5px rgb(255 0 0 / 50%)",
       },
     },
   },

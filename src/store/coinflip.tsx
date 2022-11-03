@@ -1,6 +1,8 @@
 import { createStore } from "solid-utils";
 import { SiteItem, SteamItem } from "./items";
 
+type SideType = "red" | "blue";
+
 export enum CoinFlipGameStatus {
   WAITING,
   FINISHED,
@@ -8,7 +10,7 @@ export enum CoinFlipGameStatus {
   JOINABLE,
 }
 
-type CoinFlipGameUser = {
+type CoinFlipGamePlayer = {
   id: number;
   avatar: string;
   level: number;
@@ -27,8 +29,14 @@ type CoinFlipGame = {
   owner?: string;
   time_left?: number;
   value?: number;
-  blue_side?: CoinFlipGameUser;
-  red_side?: CoinFlipGameUser;
+  blue_side?: CoinFlipGamePlayer;
+  red_side?: CoinFlipGamePlayer;
+  winner_side?: SideType;
+  secret?: string;
+  seed?: string;
+  serialNumber?: number;
+  ticketNumber?: number;
+  mod?: string;
 };
 
 type CoinFlipState = {
@@ -37,22 +45,24 @@ type CoinFlipState = {
 };
 
 // actions
+type Actions = {
+  getCoinflipDataById: (gameid: number) => CoinFlipGame | undefined;
+};
 
 const [CoinFlipProvider, useCoinFlipContext] = createStore<
   CoinFlipState,
-  {},
+  Actions,
   {}
 >({
   state: () => ({
     current: [
       {
-        id: 6709152,
+        id: 6709151,
         status: CoinFlipGameStatus.FINISHED,
         diff: 10,
         hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
         initial_value: 333,
         owner: "76561199155114267",
-        time_left: 1666982806,
         value: 333,
         blue_side: {
           id: 431033,
@@ -89,6 +99,12 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
             [760, 434],
           ],
         },
+        winner_side: "red",
+        mod: "eFeSgmkJUz-#)vmfDfaUa}AAgJgx%]V",
+        secret: "eFeSgmkJUz",
+        seed: "#)vmfDfaUa}AAgJgx%]V",
+        serialNumber: 7922462,
+        ticketNumber: 5,
       },
       {
         id: 6709152,
@@ -97,7 +113,7 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
         hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
         initial_value: 333,
         owner: "76561199155114267",
-        time_left: 1666982806,
+        time_left: 1667503351,
         value: 333,
         blue_side: {
           id: 431033,
@@ -114,13 +130,13 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
         },
       },
       {
-        id: 6709152,
+        id: 6709153,
         status: CoinFlipGameStatus.JOINED,
         diff: 10,
         hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
         initial_value: 333,
         owner: "76561199155114267",
-        time_left: 1666982806,
+        timer: 1667506316,
         value: 333,
         red_side: {
           id: 514897,
@@ -144,14 +160,15 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
         },
       },
       {
-        id: 6709155,
+        id: 6709154,
         status: CoinFlipGameStatus.WAITING,
         diff: 10,
         hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
         initial_value: 333,
         owner: "76561199155114267",
-        time_left: 1666982806,
+        timer: 1667506316,
         value: 333,
+        time_left: 1667503351,
         red_side: {
           id: 514897,
           avatar: "6d3cfb16f4b6154117d76f32b715d0e206921ada",
@@ -174,17 +191,19 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
           level: 1000,
           name: "david",
           steamid: "76561199119624606",
-          items: [
-            [760, 434],
-            [760, 434],
-            [760, 434],
-          ],
+          items: [],
         },
       },
     ],
     history: [],
   }),
+
+  actions: (set, get) => ({
+    getCoinflipDataById(gameid: number) {
+      return get.current.find((game) => game.id === gameid);
+    },
+  }),
 });
 
 export { CoinFlipProvider, useCoinFlipContext };
-export type { CoinFlipGame, CoinFlipGameUser };
+export type { CoinFlipGame, CoinFlipGamePlayer, SideType };

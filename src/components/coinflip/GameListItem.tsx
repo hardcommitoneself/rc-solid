@@ -179,14 +179,14 @@ const GameListItem = (props: GameListItemProps) => {
               <CountdownCircleProgress
                 size="md"
                 variant="orange"
-                duration={10}
+                timer={data.timer as number}
               />
             </Show>
             <Show when={data.status === CoinFlipGameStatus.JOINED}>
               <CountdownCircleProgress
                 size="md"
                 variant="green"
-                duration={10}
+                timer={data.timer as number}
               />
             </Show>
           </div>
