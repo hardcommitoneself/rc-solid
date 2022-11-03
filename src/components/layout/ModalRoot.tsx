@@ -1,19 +1,28 @@
-import { Modal } from "~components/ui/Modal";
+import { createMemo } from "solid-js";
 import { useModalContext } from "src/store/modal";
-import { Show } from "solid-js";
+
+// modals
+import { JackpotModal, CoinflipModal } from "~components/modals";
+
+const mapModals = {
+  coinflip: CoinflipModal,
+  jackpot: JackpotModal,
+};
 
 const ModalRoot = () => {
   const [state, actions] = useModalContext();
 
-  console.log(state);
+  const modal = createMemo(() => {
+    if (!state.modal) {
+      return null;
+    }
 
-  return (
-    <>
-      <Show when={state.isOpen}>
-        <Modal title="test" subtitle="test sub title" />
-      </Show>
-    </>
-  );
+    const Modal = mapModals[state.modal.name];
+
+    return <Modal {...state.modal} />;
+  });
+
+  return <>{modal()}</>;
 };
 
 export default ModalRoot;

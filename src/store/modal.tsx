@@ -1,8 +1,10 @@
 import { createStore } from "solid-utils";
 
+import { createMutable } from "solid-js/store";
 interface CoinFlipModal {
   name: "coinflip";
   gameid: number;
+  steamid: string;
 }
 
 interface JackpotModal {
@@ -12,7 +14,6 @@ interface JackpotModal {
 type Modal = CoinFlipModal | JackpotModal;
 
 type ModalState = {
-  isOpen: boolean;
   modal: Modal | null;
 };
 
@@ -23,16 +24,13 @@ type Actions = {
 
 const [ModalProvider, useModalContext] = createStore<ModalState, Actions, {}>({
   state: () => ({
-    isOpen: false,
     modal: null,
   }),
   actions: (set) => ({
     displayModal(modal: Modal) {
-      set("isOpen", true);
       set("modal", modal);
     },
     closeModal() {
-      set("isOpen", false);
       set("modal", null);
     },
   }),

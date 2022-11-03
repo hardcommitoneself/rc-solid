@@ -88,7 +88,7 @@ const UI: Component = () => {
               actions.displayModal({ name: "coinflip", gameid: 1 })
             }
           >
-            Open Modal
+            Open Coinflip Modal
           </StylizedButton>
         </div>
       </div>

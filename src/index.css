@@ -71,6 +71,10 @@
   margin-right: var(--sidebar-width);
 }
 
+body {
+  @apply text-site-200;
+}
+
 * {
   @apply outline-none;
 }
