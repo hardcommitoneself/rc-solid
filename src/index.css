@@ -78,3 +78,29 @@ body {
 * {
   @apply outline-none;
 }
+
+.r_2_p {
+  z-index: 9;
+  width: 320px;
+  height: 320px;
+  background: url("/src/assets/images/red_2_p.png") left center;
+  background-size: cover;
+
+  animation: flipper steps(90) 3s;
+}
+
+.b_2_p {
+  z-index: 9;
+  width: 320px;
+  height: 320px;
+  background: url("/src/assets/images/blue_2_p.png") left center;
+  background-size: cover;
+
+  animation: flipper steps(90) 3s;
+}
+
+@keyframes flipper {
+  100% {
+    background-position: -28800px;
+  }
+}

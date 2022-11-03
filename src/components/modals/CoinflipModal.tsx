@@ -29,6 +29,10 @@ interface ItemDetailProps {
   price: number;
 }
 
+interface CoinFlipProps {
+  winner_side: SideType;
+}
+
 const CoinflipModal = (props: CoinflipModalProps) => {
   const { gameid } = props;
   const [state, actions] = useCoinFlipContext();
@@ -63,6 +67,46 @@ const CoinflipModal = (props: CoinflipModalProps) => {
       <ModalHeader title={`Coinflip #${gameid}`}></ModalHeader>
       <ModalBody>
         <div class="relative w-full flex flex-col mt-11">
+          {/* coin flip */}
+          <div
+            class="absolute z-10 left-1/2 -translate-x-1/2"
+            classList={{
+              "-top-10":
+                coinflipGameData?.status !== CoinFlipGameStatus.FINISHED,
+              "-top-20":
+                coinflipGameData?.status === CoinFlipGameStatus.FINISHED,
+            }}
+          >
+            <Switch>
+              <Match
+                when={coinflipGameData?.status === CoinFlipGameStatus.WAITING}
+              >
+                <CountdownCircleProgress
+                  timer={coinflipGameData?.timer as number}
+                  variant="orange"
+                  size="lg"
+                />
+              </Match>
+
+              <Match
+                when={coinflipGameData?.status === CoinFlipGameStatus.JOINED}
+              >
+                <CountdownCircleProgress
+                  timer={coinflipGameData?.timer as number}
+                  variant="green"
+                  size="lg"
+                />
+              </Match>
+
+              <Match
+                when={coinflipGameData?.status === CoinFlipGameStatus.FINISHED}
+              >
+                <CoinFlip
+                  winner_side={coinflipGameData?.winner_side as SideType}
+                />
+              </Match>
+            </Switch>
+          </div>
           <div class="w-full grid grid-cols-2">
             {/* left side */}
             <PlayerDetail
@@ -72,30 +116,6 @@ const CoinflipModal = (props: CoinflipModalProps) => {
               chance={chanceBlue}
               status={coinflipGameData?.status as CoinFlipGameStatus}
             />
-            {/* coin flip */}
-            <div class="absolute -top-2.5 left-1/2 -translate-x-1/2">
-              <Switch>
-                <Match
-                  when={coinflipGameData?.status === CoinFlipGameStatus.WAITING}
-                >
-                  <CountdownCircleProgress
-                    timer={coinflipGameData?.timer as number}
-                    variant="orange"
-                    size="lg"
-                  />
-                </Match>
-
-                <Match
-                  when={coinflipGameData?.status === CoinFlipGameStatus.JOINED}
-                >
-                  <CountdownCircleProgress
-                    timer={coinflipGameData?.timer as number}
-                    variant="green"
-                    size="lg"
-                  />
-                </Match>
-              </Switch>
-            </div>
             {/* right side */}
             <PlayerDetail
               side="red"
@@ -274,6 +294,25 @@ const ItemDetail = (props: ItemDetailProps) => {
 
       <td class="px-2 py-1 align-middle text-xs text-center">${price / 20}</td>
     </tr>
+  );
+};
+
+const CoinFlip = (props: CoinFlipProps) => {
+  const { winner_side } = props;
+  const [isEnd, setIsEnd] = createSignal(false);
+
+  onMount(() => {
+    setTimeout(() => setIsEnd(true), 3005);
+  });
+
+  return (
+    <div
+      classList={{
+        b_2_p: winner_side === "blue",
+        r_2_p: winner_side === "red",
+      }}
+      style={isEnd() ? { "background-position-x": "-28480px" } : {}}
+    ></div>
   );
 };
 
