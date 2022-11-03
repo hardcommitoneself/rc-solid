@@ -11,6 +11,7 @@ import {
 import { getItemModel, SiteItem, SteamItem } from "src/store/items";
 import { StylizedButton } from "src/components/ui/Button";
 import { CountdownCircleProgress } from "src/components/ui/Progress";
+import { useModalContext } from "src/store/modal";
 import { CoinFlipGame, CoinFlipGameStatus } from "src/store/coinflip";
 
 type SideType = "blue" | "red";
@@ -62,6 +63,7 @@ const GameListItem = (props: GameListItemProps) => {
   const { data, maxLen } = props;
   const [items, setItems] = createSignal<SiteItem[]>([]);
   const [restLen, setRestLen] = createSignal(0);
+  const [, actions] = useModalContext();
 
   createEffect(() => {
     setRestLen(
@@ -194,7 +196,16 @@ const GameListItem = (props: GameListItemProps) => {
           <Show when={data.status === CoinFlipGameStatus.JOINABLE}>
             <StylizedButton>JOIN</StylizedButton>
           </Show>
-          <StylizedButton colorScheme="orange" variant="outline">
+          <StylizedButton
+            colorScheme="orange"
+            variant="outline"
+            onClick={() =>
+              actions.displayModal({
+                name: "coinflip",
+                gameid: data.id,
+              })
+            }
+          >
             VIEW
           </StylizedButton>
         </div>

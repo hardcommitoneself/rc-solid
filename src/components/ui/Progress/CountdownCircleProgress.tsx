@@ -37,8 +37,8 @@ const sizes = {
   lg: {
     lineWidth: 8,
     radius: 50,
-    width: 144,
-    height: 144,
+    width: 160,
+    height: 160,
     text: "30px Arial",
   },
 };
@@ -140,7 +140,7 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
       class="relative"
       classList={{
         "w-15 h-15": size === "md",
-        "w-36 h-36": size === "lg",
+        "w-40 h-40": size === "lg",
       }}
     >
       <canvas
