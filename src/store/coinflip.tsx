@@ -16,7 +16,7 @@ type CoinFlipGamePlayer = {
   level: number;
   name: string;
   steamid: string;
-  items: SiteItem[];
+  items?: SiteItem[];
 };
 
 type CoinFlipGame = {

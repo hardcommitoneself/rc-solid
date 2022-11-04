@@ -39,15 +39,19 @@ const CoinflipModal = (props: CoinflipModalProps) => {
 
   const coinflipGameData = actions.getCoinflipDataById(gameid as number);
 
+  if (coinflipGameData === undefined) {
+    return;
+  }
+
   // chance
   let totalRed = 0;
   let totalBlue = 0;
-  if (coinflipGameData?.red_side)
-    totalRed = coinflipGameData.red_side.items.reduce((t, b) => {
+  if (coinflipGameData.red_side && coinflipGameData.red_side.items)
+    totalRed = coinflipGameData.red_side.items?.reduce((t, b) => {
       return (t += b[1]);
     }, 0);
 
-  if (coinflipGameData?.blue_side)
+  if (coinflipGameData.blue_side && coinflipGameData.blue_side.items)
     totalBlue = coinflipGameData.blue_side.items.reduce((t, b) => {
       return (t += b[1]);
     }, 0);
@@ -71,37 +75,37 @@ const CoinflipModal = (props: CoinflipModalProps) => {
             class="absolute z-10 left-1/2 -translate-x-1/2"
             classList={{
               "-top-10":
-                coinflipGameData?.status !== CoinFlipGameStatus.FINISHED,
+                coinflipGameData.status !== CoinFlipGameStatus.FINISHED,
               "-top-20":
-                coinflipGameData?.status === CoinFlipGameStatus.FINISHED,
+                coinflipGameData.status === CoinFlipGameStatus.FINISHED,
             }}
           >
             <Switch>
               <Match
-                when={coinflipGameData?.status === CoinFlipGameStatus.WAITING}
+                when={coinflipGameData.status === CoinFlipGameStatus.WAITING}
               >
                 <CountdownCircleProgress
-                  timer={coinflipGameData?.timer as number}
+                  timer={coinflipGameData.timer as number}
                   variant="orange"
                   size="lg"
                 />
               </Match>
 
               <Match
-                when={coinflipGameData?.status === CoinFlipGameStatus.JOINED}
+                when={coinflipGameData.status === CoinFlipGameStatus.JOINED}
               >
                 <CountdownCircleProgress
-                  timer={coinflipGameData?.timer as number}
+                  timer={coinflipGameData.timer as number}
                   variant="green"
                   size="lg"
                 />
               </Match>
 
               <Match
-                when={coinflipGameData?.status === CoinFlipGameStatus.FINISHED}
+                when={coinflipGameData.status === CoinFlipGameStatus.FINISHED}
               >
                 <CoinFlip
-                  winner_side={coinflipGameData?.winner_side as SideType}
+                  winner_side={coinflipGameData.winner_side as SideType}
                 />
               </Match>
             </Switch>
@@ -110,18 +114,18 @@ const CoinflipModal = (props: CoinflipModalProps) => {
             {/* left side */}
             <PlayerDetail
               side="blue"
-              isWon={coinflipGameData?.winner_side === "blue"}
-              data={coinflipGameData?.blue_side as CoinFlipGamePlayer}
+              isWon={coinflipGameData.winner_side === "blue"}
+              data={coinflipGameData.blue_side as CoinFlipGamePlayer}
               chance={chanceBlue}
-              status={coinflipGameData?.status as CoinFlipGameStatus}
+              status={coinflipGameData.status as CoinFlipGameStatus}
             />
             {/* right side */}
             <PlayerDetail
               side="red"
-              isWon={coinflipGameData?.winner_side === "red"}
-              data={coinflipGameData?.red_side as CoinFlipGamePlayer}
+              isWon={coinflipGameData.winner_side === "red"}
+              data={coinflipGameData.red_side as CoinFlipGamePlayer}
               chance={chanceRed}
-              status={coinflipGameData?.status as CoinFlipGameStatus}
+              status={coinflipGameData.status as CoinFlipGameStatus}
             />
           </div>
 
@@ -130,36 +134,36 @@ const CoinflipModal = (props: CoinflipModalProps) => {
             {/* hash value */}
             <Show
               when={
-                coinflipGameData?.status === CoinFlipGameStatus.WAITING ||
-                coinflipGameData?.status === CoinFlipGameStatus.JOINABLE
+                coinflipGameData.status === CoinFlipGameStatus.WAITING ||
+                coinflipGameData.status === CoinFlipGameStatus.JOINABLE
               }
             >
               <span class="text-white">
                 This game will expire on&nbsp;
                 {new Date(
-                  (coinflipGameData?.time_left as number) * 1000
+                  (coinflipGameData.time_left as number) * 1000
                 ).toUTCString()}
               </span>
             </Show>
-            <span>Hash: {coinflipGameData?.hash}</span>
+            <span>Hash: {coinflipGameData.hash}</span>
 
             {/* should delay while coin flipping */}
             <Show
               when={
                 showMetaData() &&
-                coinflipGameData?.status === CoinFlipGameStatus.FINISHED
+                coinflipGameData.status === CoinFlipGameStatus.FINISHED
               }
             >
-              <span>Secret: {coinflipGameData?.secret}</span>
-              <span>Winning ticket: {coinflipGameData?.ticketNumber}</span>
-              <span>Serial number: {coinflipGameData?.serialNumber}</span>
-              <span>Random.org seed: {coinflipGameData?.seed}</span>
-              <span>Mod: {coinflipGameData?.mod}</span>
+              <span>Secret: {coinflipGameData.secret}</span>
+              <span>Winning ticket: {coinflipGameData.ticketNumber}</span>
+              <span>Serial number: {coinflipGameData.serialNumber}</span>
+              <span>Random.org seed: {coinflipGameData.seed}</span>
+              <span>Mod: {coinflipGameData.mod}</span>
 
               {/* validate serial number */}
               <a
                 class="cursor-pointer text-lime-500 text-sm hover:underline"
-                href={`https://rustchance.com/provably-fair/serial?number=${coinflipGameData?.serialNumber}`}
+                href={`https://rustchance.com/provably-fair/serial?number=${coinflipGameData.serialNumber}`}
               >
                 Validate Round
               </a>
@@ -178,7 +182,7 @@ const PlayerDetail = (props: PlayerDetailProps) => {
 
   onMount(() => {
     // convert cent to dollar
-    if (data !== undefined)
+    if (data && data.items)
       setTotal(
         data.items.reduce((t, b) => {
           return (t += b[1]);
@@ -260,7 +264,7 @@ const PlayerDetail = (props: PlayerDetailProps) => {
       </a>
 
       {/* player item info */}
-      <Show when={data !== undefined && data.items.length > 0}>
+      <Show when={data && data.items && data.items.length > 0}>
         <table class="border-collapse w-full">
           <tbody>
             {/* total price & chance */}
