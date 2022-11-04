@@ -5,6 +5,7 @@ import { useUserContext } from "src/store/user";
 import { useCoinFlipContext } from "src/store/coinflip";
 import { SiteItem } from "src/store/items";
 import createDebounce from "@solid-primitives/debounce";
+import { StylizedButton } from "~components/ui/Button";
 
 // components
 import { Stats, Actions, GameListItem } from "~components/coinflip";
@@ -13,6 +14,8 @@ import { Announcement } from "~components/layout";
 const Debug = () => {
   const [_, { loadUser, incrementExperience, incrementBalance }] =
     useUserContext();
+
+  const [state, { createNewGame, waiting, joined }] = useCoinFlipContext();
 
   function exp() {
     incrementExperience(1500);
@@ -23,10 +26,14 @@ const Debug = () => {
   }
 
   return (
-    <div class="flex space-x-5">
-      <button onClick={loadUser}>load</button>
-      <button onClick={exp}>xp</button>
-      <button onClick={balance}>balance</button>
+    <div class="flex gap-1">
+      <StylizedButton onClick={() => createNewGame(400000)}>
+        Create
+      </StylizedButton>
+      <StylizedButton onClick={() => waiting(400000)}>Waiting</StylizedButton>
+      <StylizedButton onClick={() => joined(400000)}>Join</StylizedButton>
+      <StylizedButton>Finish</StylizedButton>
+      <StylizedButton>Remove</StylizedButton>
     </div>
   );
 };
@@ -79,6 +86,7 @@ const Coinflip = () => {
       <div class="flex items-center justify-between px-10 h-32 bg-gradient-to-t from-gradient-dark-gray-100 to-gradient-dark-gray-200">
         <Stats />
         <Actions />
+        <Debug />
       </div>
 
       {/* Announcement */}

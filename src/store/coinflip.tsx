@@ -47,6 +47,9 @@ type CoinFlipState = {
 // actions
 type Actions = {
   getCoinflipDataById: (gameid: number) => CoinFlipGame | undefined;
+  createNewGame: (gameid: number) => void;
+  waiting: (gameid: number) => void;
+  joined: (gameid: number) => void;
 };
 
 const [CoinFlipProvider, useCoinFlipContext] = createStore<
@@ -136,7 +139,7 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
         hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
         initial_value: 333,
         owner: "76561199155114267",
-        timer: 1667506316,
+        timer: 1667584216,
         value: 333,
         red_side: {
           id: 514897,
@@ -166,7 +169,7 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
         hash: "0e98287fed8fff784491ead2d446b4f1ec4e06bda369cbc2758d1936eceb0cc5",
         initial_value: 333,
         owner: "76561199155114267",
-        timer: 1667506316,
+        timer: 1667584216,
         value: 333,
         time_left: 1667503351,
         red_side: {
@@ -201,6 +204,113 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
   actions: (set, get) => ({
     getCoinflipDataById(gameid: number) {
       return get.current.find((game) => game.id === gameid);
+    },
+    createNewGame(gameid: number) {
+      const a: CoinFlipGame = {
+        id: gameid,
+        status: CoinFlipGameStatus.JOINABLE,
+        time_left: 1667593412,
+        value: 556,
+        owner: "76561198190685382",
+        initial_value: 556,
+        hash: "655e482ff7f79f8c43e1e50850ba0ba59f69b637f6f0373559b81c40a16c10bf",
+        diff: 10,
+        blue_side: {
+          id: 117475,
+          avatar: "650158753d392ec232546fd5b7b29723dfa67c9f",
+          level: Math.floor(Math.random() * 90 + 1),
+          name: "Prorere #****",
+          steamid: "76561198190685382",
+          items: [
+            [3535, 172],
+            [2545, 115],
+          ],
+        },
+      };
+
+      if (get.current.find((game) => game.id === gameid) === undefined)
+        set("current", [...get.current, a]);
+    },
+    waiting(gameid: number) {
+      // get joinable game id from current game list
+      const joinable_gameid = gameid;
+
+      const game = get.current.find((game) => game.id === joinable_gameid);
+
+      if (game) {
+        const index = get.current.indexOf(game);
+
+        const player: CoinFlipGamePlayer = {
+          id: 92308,
+          avatar: "3a341435afd82d6ff7d232376f38f6c66fe6e71c",
+          level: Math.floor(Math.random() * 90 + 1),
+          name: "Ko3eY #**** #****",
+          steamid: "76561198340183346",
+        };
+
+        const other = game.blue_side
+          ? {
+              red_side: player,
+            }
+          : {
+              blue_side: player,
+            };
+
+        if (game.blue_side) {
+        }
+
+        set("current", [
+          ...get.current.slice(0, index),
+          {
+            ...game,
+            status: CoinFlipGameStatus.WAITING,
+            timer: new Date().getTime() / 1000 + 100,
+            ...other,
+          },
+          ...get.current.slice(index + 1, get.current.length),
+        ]);
+      }
+    },
+    joined(gameid: number) {
+      const game = get.current.find((game) => game.id === gameid);
+
+      if (game) {
+        const index = get.current.indexOf(game);
+
+        const items: SiteItem[] = [
+          [1419, 156],
+          [789, 101],
+          [1936, 673],
+          [2814, 329],
+        ];
+
+        if (game.blue_side && game.red_side) {
+          const other = game.red_side.items
+            ? {
+                blue_side: {
+                  ...game.blue_side,
+                  items: items,
+                },
+              }
+            : {
+                red_side: {
+                  ...game.red_side,
+                  items: items,
+                },
+              };
+
+          set("current", [
+            ...get.current.slice(0, index),
+            {
+              ...game,
+              status: CoinFlipGameStatus.JOINED,
+              timer: new Date().getTime() / 1000 + 10,
+              ...other,
+            },
+            ...get.current.slice(index + 1, get.current.length),
+          ]);
+        }
+      }
     },
   }),
 });
