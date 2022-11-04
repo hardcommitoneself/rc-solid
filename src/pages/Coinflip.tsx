@@ -37,7 +37,7 @@ const Coinflip = () => {
 
   const [maxLen, setMaxLen] = createSignal(0);
 
-  const setWindowSize = createDebounce(() => {
+  const setWindowSize = () => {
     if (window.innerWidth > 1600) {
       setMaxLen(6);
       return;
@@ -58,15 +58,17 @@ const Coinflip = () => {
       setMaxLen(6);
       return;
     }
-  }, 200);
+  };
+
+  const debounceWindowSize = createDebounce(setWindowSize, 200);
 
   createEffect(() => {
     setWindowSize();
-    window.addEventListener("resize", setWindowSize);
+    window.addEventListener("resize", debounceWindowSize);
   });
 
   onCleanup(async () => {
-    window.removeEventListener("resize", setWindowSize);
+    window.removeEventListener("resize", debounceWindowSize);
   });
 
   return (

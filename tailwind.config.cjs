@@ -50,15 +50,29 @@ module.exports = {
         4.5: "1.125rem",
       },
       backgroundImage: {
-        "item-bg-f15840": "url('/src/assets/images/item/f15840.png')",
-        "item-bg-a7ec2e": "url('/src/assets/images/item/a7ec2e.png')",
-        "item-bg-35a3f1": "url('/src/assets/images/item/35a3f1.png')",
+        "item-f15840": "url('/src/assets/images/item/f15840.png')",
+        "item-a7ec2e": "url('/src/assets/images/item/a7ec2e.png')",
+        "item-35a3f1": "url('/src/assets/images/item/35a3f1.png')",
         "coin-red": "url('/src/assets/images/coin/red_side.png')",
         "coin-blue": "url('/src/assets/images/coin/blue_side.png')",
       },
       boxShadow: {
         win: "0 0 25px 5px rgb(0 255 0 / 50%)",
         lose: "0 0 25px 5px rgb(255 0 0 / 50%)",
+      },
+      minWidth: {
+        28: "5.5rem",
+        30: "7.5rem",
+      },
+      height: {
+        12.5: "3.125rem",
+        23: "4.425rem",
+      },
+      width: {
+        195: "48.75rem",
+      },
+      borderWidth: {
+        0.25: "0.0625rem",
       },
     },
   },

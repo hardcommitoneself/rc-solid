@@ -12,6 +12,7 @@ import { getItemModel, SiteItem, SteamItem } from "src/store/items";
 import { StylizedButton } from "src/components/ui/Button";
 import { CountdownCircleProgress } from "src/components/ui/Progress";
 import { useModalContext } from "src/store/modal";
+import { ModalName } from "src/store/modal";
 import { CoinFlipGame, CoinFlipGameStatus } from "src/store/coinflip";
 
 type SideType = "blue" | "red";
@@ -54,9 +55,9 @@ const ITEM_IMAGE_URL = import.meta.env
 
 // bg
 const ItemBGImages = {
-  f15840: "bg-item-bg-f15840",
-  a7ec2e: "bg-item-bg-a7ec2e",
-  "35a3f1": "bg-item-bg-35a3f1",
+  f15840: "bg-item-f15840",
+  a7ec2e: "bg-item-a7ec2e",
+  "35a3f1": "bg-item-35a3f1",
 };
 
 const GameListItem = (props: GameListItemProps) => {
@@ -82,7 +83,7 @@ const GameListItem = (props: GameListItemProps) => {
   });
 
   return (
-    <div class="flex flex-col md-lg:flex-row gap-5 p-2.5 md-lg:h-[90px] bg-site-900 rounded">
+    <div class="flex flex-col md-lg:flex-row gap-5 p-2.5 md-lg:h-24 bg-site-900 rounded">
       {/* left side */}
       <div class="md-lg:w-2/3 flex flex-col md-lg:flex-row md-lg:items-center gap-8">
         {/* avatar of blue and red */}
@@ -201,7 +202,7 @@ const GameListItem = (props: GameListItemProps) => {
             variant="outline"
             onClick={() =>
               actions.displayModal({
-                name: "coinflip",
+                name: ModalName.COIN_FLIP,
                 gameid: data.id,
               })
             }
@@ -298,7 +299,7 @@ const Item = (props: ItemProps) => {
 
   return (
     <div
-      class={`flex items-center justify-center min-w-[90px] h-[70px] rounded ${itemBG}`}
+      class={`flex items-center justify-center min-w-28 h-23 rounded ${itemBG}`}
       onMouseEnter={() => setIsTooltipShow(true)}
       onMouseLeave={() => setIsTooltipShow(false)}
     >

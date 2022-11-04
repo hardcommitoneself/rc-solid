@@ -18,7 +18,7 @@ const Modal = (props: ModalProps) => {
       onClick={() => actions.closeModal()}
     >
       <div
-        class="w-full relative bg-site-800 overflow-hidden rounded lg:w-[780px] lg:my-6 lg:mx-auto"
+        class="w-full relative bg-site-800 overflow-hidden rounded lg:w-195 lg:my-6 lg:mx-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

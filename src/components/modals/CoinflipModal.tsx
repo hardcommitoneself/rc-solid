@@ -1,7 +1,11 @@
 import { Modal, ModalHeader, ModalBody } from "~components/ui/Modal";
-import { CoinFlipGameStatus } from "src/store/coinflip";
-import { useCoinFlipContext } from "src/store/coinflip";
-import { CoinFlipGamePlayer, SideType } from "src/store/coinflip";
+import {
+  CoinFlipGameStatus,
+  useCoinFlipContext,
+  CoinFlipGamePlayer,
+  SideType,
+} from "src/store/coinflip";
+import { CoinFlipModal as CoinflipModalProps } from "src/store/modal";
 import { Badge } from "~components/ui/Badge";
 import { getItemModel } from "src/store/items";
 import { CountdownCircleProgress } from "~components/ui/Progress";
@@ -10,11 +14,6 @@ import { createSignal, onMount, For, Show, Switch, Match } from "solid-js";
 // env
 const ITEM_IMAGE_URL = import.meta.env
   .VITE_STEAM_STATIC_ECONOMY_IMAGE_PUBLIC_URL;
-
-interface CoinflipModalProps {
-  name: string;
-  gameid?: number;
-}
 
 interface PlayerDetailProps {
   side: SideType;
@@ -59,7 +58,7 @@ const CoinflipModal = (props: CoinflipModalProps) => {
   onMount(() => {
     setTimeout(() => {
       setShowMetaData(true);
-    }, 1000);
+    }, 3000);
   });
 
   return (
@@ -175,6 +174,7 @@ const CoinflipModal = (props: CoinflipModalProps) => {
 const PlayerDetail = (props: PlayerDetailProps) => {
   const { side, isWon, data, chance, status } = props;
   const [total, setTotal] = createSignal(0);
+  const [isEndCoinFlip, setIsEndCoinFlip] = createSignal(false);
 
   onMount(() => {
     // convert cent to dollar
@@ -184,13 +184,16 @@ const PlayerDetail = (props: PlayerDetailProps) => {
           return (t += b[1]);
         }, 0) / 20
       );
+
+    setTimeout(() => setIsEndCoinFlip(true), 3000);
   });
 
   return (
     <div
-      class="flex flex-col items-center gap-4 p-1"
+      class="flex flex-col items-center gap-4 p-1 transition duration-300"
       classList={{
-        "opacity-30": !isWon && status === CoinFlipGameStatus.FINISHED,
+        "opacity-30":
+          !isWon && isEndCoinFlip() && status === CoinFlipGameStatus.FINISHED,
       }}
     >
       {/* player base info */}
@@ -210,10 +213,16 @@ const PlayerDetail = (props: PlayerDetailProps) => {
         {/* avatar */}
         <div class="relative">
           <img
-            class="w-24 h-24 rounded-md"
+            class="w-24 h-24 rounded-md transition duration-300"
             classList={{
-              "shadow-win": isWon && status === CoinFlipGameStatus.FINISHED,
-              "shadow-lose": !isWon && status === CoinFlipGameStatus.FINISHED,
+              "shadow-win":
+                isWon &&
+                isEndCoinFlip() &&
+                status === CoinFlipGameStatus.FINISHED,
+              "shadow-lose":
+                !isWon &&
+                isEndCoinFlip() &&
+                status === CoinFlipGameStatus.FINISHED,
             }}
             src={
               data !== undefined
@@ -285,7 +294,7 @@ const ItemDetail = (props: ItemDetailProps) => {
       {/* image */}
       <td class="flex items-center justify-center px-2 py-1 align-middle text-sm text-left">
         <img
-          class="w-20 h-[50px]"
+          class="w-20 h-12.5"
           src={`${ITEM_IMAGE_URL}/${item?.image}/80fx50f`}
         />
       </td>
@@ -299,20 +308,24 @@ const ItemDetail = (props: ItemDetailProps) => {
 
 const CoinFlip = (props: CoinFlipProps) => {
   const { winner_side } = props;
+  const [start, setStart] = createSignal(false);
   const [isEnd, setIsEnd] = createSignal(false);
 
   onMount(() => {
-    setTimeout(() => setIsEnd(true), 3005);
+    setTimeout(() => setStart(true), 500);
+    setTimeout(() => setIsEnd(true), 3501);
   });
 
   return (
-    <div
-      classList={{
-        b_2_p: winner_side === "blue",
-        r_2_p: winner_side === "red",
-      }}
-      style={isEnd() ? { "background-position-x": "-28480px" } : {}}
-    ></div>
+    <Show when={start()}>
+      <div
+        classList={{
+          b_2_p: winner_side === "blue",
+          r_2_p: winner_side === "red",
+        }}
+        style={isEnd() ? { "background-position-x": "-28480px" } : {}}
+      ></div>
+    </Show>
   );
 };
 

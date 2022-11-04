@@ -10,7 +10,7 @@ const ModalHeader = (props: ModalHeaderProps) => {
   const [, actions] = useModalContext();
 
   return (
-    <div class="relative flex items-center justify-between border-b-[1px] border-b-site-600 bg-gradient-to-b from-gradient-dark-gray-100 to-gradient-dark-gray-200">
+    <div class="relative flex items-center justify-between border-b-0.25 border-b-site-600 bg-gradient-to-b from-gradient-dark-gray-100 to-gradient-dark-gray-200">
       {/* title & subtitle */}
       <div class="flex items-center gap-5 pl-2.5">
         {/* title */}

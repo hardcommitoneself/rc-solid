@@ -83,7 +83,8 @@ body {
   z-index: 9;
   width: 320px;
   height: 320px;
-  background: url("/src/assets/images/red_2_p.png") left center;
+  background: url("https://rustchance.com/static/media/red_2_p.f0edcd26.png")
+    left center;
   background-size: cover;
 
   animation: flipper steps(90) 3s;
@@ -93,7 +94,8 @@ body {
   z-index: 9;
   width: 320px;
   height: 320px;
-  background: url("/src/assets/images/blue_2_p.png") left center;
+  background: url("https://rustchance.com/static/media/blue_2_p.6a3658f8.png")
+    left center;
   background-size: cover;
 
   animation: flipper steps(90) 3s;
