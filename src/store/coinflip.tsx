@@ -49,6 +49,8 @@ type Actions = {
   createNewGame: (gameid: number) => void;
   waiting: (gameid: number) => void;
   joined: (gameid: number) => void;
+  finish: (gameid: number) => void;
+  remove: (gameid: number) => void;
 };
 
 const [CoinFlipProvider, useCoinFlipContext] = createStore<
@@ -229,6 +231,7 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
       if (get.current.find((game) => game.id === gameid) === undefined)
         set("current", [...get.current, a]);
     },
+
     waiting(gameid: number) {
       // get joinable game id from current game list
       const joinable_gameid = gameid;
@@ -269,6 +272,7 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
         ]);
       }
     },
+
     joined(gameid: number) {
       const game = get.current.find((game) => game.id === gameid);
 
@@ -308,6 +312,42 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
             ...get.current.slice(index + 1, get.current.length),
           ]);
         }
+      }
+    },
+
+    finish(gameid: number) {
+      const game = get.current.find((game) => game.id === gameid);
+
+      if (game) {
+        const index = get.current.indexOf(game);
+
+        set("current", [
+          ...get.current.slice(0, index),
+          {
+            ...game,
+            status: CoinFlipGameStatus.FINISHED,
+            mod: "SBA2goN6ua-*fR&|Y(oqG+hl@l|jowl",
+            secret: "SBA2goN6ua",
+            seed: "*fR&|Y(oqG+hl@l|jowl",
+            serialNumber: 7928349,
+            ticketNumber: 180,
+            winner_side: "red",
+          },
+          ...get.current.slice(index + 1, get.current.length),
+        ]);
+      }
+    },
+
+    remove(gameid: number) {
+      const game = get.current.find((game) => game.id === gameid);
+
+      if (game) {
+        const index = get.current.indexOf(game);
+
+        set("current", [
+          ...get.current.splice(0, index),
+          ...get.current.splice(index + 1, get.current.length),
+        ]);
       }
     },
   }),

@@ -17,6 +17,7 @@ import { CoinFlipGame, CoinFlipGameStatus } from "src/store/coinflip";
 type SideType = "blue" | "red";
 type CoinType = "blue" | "red";
 type CoinPosType = "tr" | "tl" | "br" | "bl";
+type AvatarSizeType = "md" | "sm";
 
 type ItemBackgroundImageType = "f15840" | "a7ec2e" | "35a3f1";
 
@@ -30,6 +31,7 @@ interface AvatarProps extends JSX.HTMLAttributes<HTMLDivElement> {
   hasCoinBadge: boolean;
   side?: SideType;
   pos?: CoinPosType;
+  size?: AvatarSizeType;
 }
 
 interface CoinProps {
@@ -177,11 +179,11 @@ const GameListItem = (props: GameListItemProps) => {
           <div class="flex items-center justify-center">
             <Show when={data.status === CoinFlipGameStatus.FINISHED}>
               <Avatar
-                class="ml-5"
                 id={data.red_side?.avatar}
                 hasCoinBadge={true}
                 side="red"
                 pos="tl"
+                size="sm"
               />
             </Show>
             <Show when={data.status === CoinFlipGameStatus.WAITING}>
@@ -225,30 +227,34 @@ const GameListItem = (props: GameListItemProps) => {
 };
 
 const Avatar = (props: AvatarProps) => {
-  const { id, hasCoinBadge, side, pos, ...rest } = props;
+  const { id, hasCoinBadge, side, pos, size = "md", ...rest } = props;
 
   return (
     <div
-      class="relative w-14 h-14 z-10"
+      class="relative z-10"
       classList={{
         [rest.class as string]: true,
+        "w-14 h-14": size === "md",
+        "w-11 h-11": size === "sm",
       }}
     >
       <img
         src={`https://avatars.steamstatic.com/${id}_full.jpg`}
         class="rounded-full"
-        width={56}
-        height={56}
+        width={size === "md" ? 56 : 44}
+        height={size === "md" ? 56 : 44}
       />
 
       <Show when={side != undefined}>
         <div
-          class="absolute w-5 h-5"
+          class="absolute"
           classList={{
             "top-2 -left-2": pos === "tl",
             "top-2 -right-2": pos === "tr",
             "bottom-2 -left-2": pos === "bl",
             "bottom-2 -right-2": pos === "br",
+            "w-6 h-6": size === "md",
+            "w-5 h-5": size === "sm",
           }}
         >
           <img
@@ -257,8 +263,8 @@ const Avatar = (props: AvatarProps) => {
                 ? "https://rustchance.com/static/media/red_side.1d169258.png"
                 : "https://rustchance.com/static/media/blue_side.167bac47.png"
             }`}
-            width={20}
-            height={20}
+            width={size === "md" ? 24 : 20}
+            height={size === "md" ? 24 : 20}
           />
         </div>
       </Show>

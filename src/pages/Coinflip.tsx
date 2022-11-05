@@ -14,7 +14,8 @@ const Debug = () => {
   const [_, { loadUser, incrementExperience, incrementBalance }] =
     useUserContext();
 
-  const [state, { createNewGame, waiting, joined }] = useCoinFlipContext();
+  const [state, { createNewGame, waiting, joined, finish, remove }] =
+    useCoinFlipContext();
 
   function exp() {
     incrementExperience(1500);
@@ -31,8 +32,8 @@ const Debug = () => {
       </StylizedButton>
       <StylizedButton onClick={() => waiting(400000)}>Waiting</StylizedButton>
       <StylizedButton onClick={() => joined(400000)}>Join</StylizedButton>
-      <StylizedButton>Finish</StylizedButton>
-      <StylizedButton>Remove</StylizedButton>
+      <StylizedButton onClick={() => finish(400000)}>Finish</StylizedButton>
+      <StylizedButton onClick={() => remove(400000)}>Remove</StylizedButton>
     </div>
   );
 };
