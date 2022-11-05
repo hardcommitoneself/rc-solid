@@ -12,7 +12,6 @@ import { getItemModel, SiteItem, SteamItem } from "src/store/items";
 import { StylizedButton } from "src/components/ui/Button";
 import { CountdownCircleProgress } from "src/components/ui/Progress";
 import { useModalContext } from "src/store/modal";
-import { ModalName } from "src/store/modal";
 import { CoinFlipGame, CoinFlipGameStatus } from "src/store/coinflip";
 
 type SideType = "blue" | "red";
@@ -38,9 +37,8 @@ interface CoinProps {
 }
 
 interface PriceCardProps {
-  totalValue: number;
-  estFrom: number;
-  estTo: number;
+  totalPrice: Accessor<number>;
+  diff: number;
   isFinished: boolean;
 }
 
@@ -64,15 +62,8 @@ const GameListItem = (props: GameListItemProps) => {
   const { data, maxLen } = props;
   const [items, setItems] = createSignal<SiteItem[]>([]);
   const [restLen, setRestLen] = createSignal(0);
+  const [totalPrice, setTotalPrice] = createSignal(0);
   const [, actions] = useModalContext();
-
-  createEffect(() => {
-    setRestLen(
-      (data.blue_side?.items || []).length +
-        (data.red_side?.items || []).length -
-        maxLen()
-    );
-  });
 
   createEffect(() => {
     setItems(
@@ -80,12 +71,27 @@ const GameListItem = (props: GameListItemProps) => {
         .sort((a, b) => b[1] - a[1])
         .slice(0, maxLen())
     );
+
+    setRestLen(
+      (data.blue_side?.items || []).length +
+        (data.red_side?.items || []).length -
+        maxLen()
+    );
+
+    setTotalPrice(
+      [
+        ...(data.blue_side?.items || []),
+        ...(data.red_side?.items || []),
+      ].reduce((total, item) => {
+        return total + item[1];
+      }, 0) / 20
+    );
   });
 
   return (
     <div class="flex flex-col md-lg:flex-row gap-5 p-2.5 md-lg:h-24 bg-site-900 rounded">
       {/* left side */}
-      <div class="md-lg:w-2/3 flex flex-col md-lg:flex-row md-lg:items-center gap-8">
+      <div class="md-lg:w-3/5 flex flex-col md-lg:flex-row md-lg:items-center gap-8">
         {/* avatar of blue and red */}
         <div class="w-40 flex items-center justify-center">
           <Switch>
@@ -155,15 +161,17 @@ const GameListItem = (props: GameListItemProps) => {
       </div>
 
       {/* right side */}
-      <div class="flex flex-col gap-5 md-lg:gap-0 md-lg:flex-row items-center justify-between md-lg:w-1/3">
+      <div class="flex flex-col gap-5 md-lg:gap-0 md-lg:flex-row items-center justify-between md-lg:w-2/5">
         {/* price and status */}
-        <div class="grid grid-cols-2 w-full md-lg:flex gap-10">
+        <div class="grid grid-cols-2 w-1/2 gap-5 xl:gap-10">
           {/* price card */}
           <PriceCard
-            totalValue={174.32}
-            estFrom={173.21}
-            estTo={178.3}
-            isFinished={data.status === CoinFlipGameStatus.FINISHED}
+            totalPrice={totalPrice}
+            diff={data.diff as number}
+            isFinished={
+              data.status === CoinFlipGameStatus.FINISHED ||
+              data.status === CoinFlipGameStatus.JOINED
+            }
           />
           {/* status */}
           <div class="flex items-center justify-center">
@@ -195,19 +203,20 @@ const GameListItem = (props: GameListItemProps) => {
         {/* actions */}
         <div class="flex gap-2">
           <Show when={data.status === CoinFlipGameStatus.JOINABLE}>
-            <StylizedButton>JOIN</StylizedButton>
+            <StylizedButton size="sm">JOIN</StylizedButton>
           </Show>
           <StylizedButton
             colorScheme="orange"
             variant="outline"
+            size="sm"
             onClick={() =>
               actions.displayModal({
-                name: ModalName.COIN_FLIP,
+                name: "coinflip",
                 gameid: data.id,
               })
             }
           >
-            VIEW
+            View
           </StylizedButton>
         </div>
       </div>
@@ -277,13 +286,14 @@ const Coin = (props: CoinProps) => {
 };
 
 const PriceCard = (props: PriceCardProps) => {
-  const { totalValue, estFrom, estTo, isFinished } = props;
+  const { totalPrice, diff, isFinished } = props;
   return (
-    <div class="flex flex-col justify-center items-center">
-      <span class="text-sm font-semibold leading-loose">$ {totalValue}</span>
+    <div class="flex flex-col justify-center items-center whitespace-nowrap">
+      <span class="text-sm font-semibold leading-loose">$ {totalPrice()}</span>
       <Show when={!isFinished}>
         <span class="text-xs text-site-330">
-          {estFrom} - {estTo}
+          {((totalPrice() * (100 - diff)) / 100).toFixed(2)} -{" "}
+          {((totalPrice() * (100 + diff)) / 100).toFixed(2)}
         </span>
       </Show>
     </div>

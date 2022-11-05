@@ -5,11 +5,23 @@ import {
   CoinFlipGamePlayer,
   SideType,
 } from "src/store/coinflip";
-import { CoinFlipModal as CoinflipModalProps } from "src/store/modal";
+import {
+  CoinFlipModal as CoinflipModalProps,
+  useModalContext,
+} from "src/store/modal";
 import { Badge } from "~components/ui/Badge";
 import { getItemModel } from "src/store/items";
 import { CountdownCircleProgress } from "~components/ui/Progress";
-import { createSignal, onMount, For, Show, Switch, Match } from "solid-js";
+import {
+  createSignal,
+  onMount,
+  For,
+  Show,
+  Switch,
+  Match,
+  Accessor,
+  onCleanup,
+} from "solid-js";
 
 // env
 const ITEM_IMAGE_URL = import.meta.env
@@ -21,6 +33,7 @@ interface PlayerDetailProps {
   data: CoinFlipGamePlayer;
   chance: number;
   status: CoinFlipGameStatus;
+  isEndCoinFlip: Accessor<boolean>;
 }
 
 interface ItemDetailProps {
@@ -34,35 +47,51 @@ interface CoinFlipProps {
 
 const CoinflipModal = (props: CoinflipModalProps) => {
   const { gameid } = props;
-  const [state, actions] = useCoinFlipContext();
+  const [coinflipState, coinflipActions] = useCoinFlipContext();
+  const [modalState, modalActions] = useModalContext();
   const [showMetaData, setShowMetaData] = createSignal(false);
+  const [isEndCoinFlip, setIsEndCoinFlip] = createSignal(false);
 
-  const coinflipGameData = actions.getCoinflipDataById(gameid as number);
+  const coinflipGameData = coinflipActions.getCoinflipDataById(
+    gameid as number
+  );
 
   if (coinflipGameData === undefined) {
+    // close modal
+    modalActions.closeModal();
     return;
   }
 
   // chance
-  let totalRed = 0;
-  let totalBlue = 0;
+  let totalPriceOfRed = 0;
+  let totalPriceOfBlue = 0;
   if (coinflipGameData.red_side && coinflipGameData.red_side.items)
-    totalRed = coinflipGameData.red_side.items?.reduce((t, b) => {
-      return (t += b[1]);
+    totalPriceOfRed = coinflipGameData.red_side.items?.reduce((total, item) => {
+      return (total += item[1]);
     }, 0);
 
   if (coinflipGameData.blue_side && coinflipGameData.blue_side.items)
-    totalBlue = coinflipGameData.blue_side.items.reduce((t, b) => {
-      return (t += b[1]);
-    }, 0);
+    totalPriceOfBlue = coinflipGameData.blue_side.items.reduce(
+      (total, item) => {
+        return (total += item[1]);
+      },
+      0
+    );
 
-  const chanceBlue = (totalBlue / (totalRed + totalBlue)) * 100;
-  const chanceRed = (totalRed / (totalRed + totalBlue)) * 100;
+  const chanceOfBlue =
+    (totalPriceOfBlue / (totalPriceOfRed + totalPriceOfBlue)) * 100;
+  const chanceOfRed =
+    (totalPriceOfRed / (totalPriceOfRed + totalPriceOfBlue)) * 100;
 
   onMount(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setShowMetaData(true);
-    }, 3000);
+      setIsEndCoinFlip(true);
+    }, 3500);
+
+    onCleanup(() => {
+      clearTimeout(timeout);
+    });
   });
 
   return (
@@ -116,16 +145,18 @@ const CoinflipModal = (props: CoinflipModalProps) => {
               side="blue"
               isWon={coinflipGameData.winner_side === "blue"}
               data={coinflipGameData.blue_side as CoinFlipGamePlayer}
-              chance={chanceBlue}
+              chance={chanceOfBlue}
               status={coinflipGameData.status as CoinFlipGameStatus}
+              isEndCoinFlip={isEndCoinFlip}
             />
             {/* right side */}
             <PlayerDetail
               side="red"
               isWon={coinflipGameData.winner_side === "red"}
               data={coinflipGameData.red_side as CoinFlipGamePlayer}
-              chance={chanceRed}
+              chance={chanceOfRed}
               status={coinflipGameData.status as CoinFlipGameStatus}
+              isEndCoinFlip={isEndCoinFlip}
             />
           </div>
 
@@ -176,20 +207,17 @@ const CoinflipModal = (props: CoinflipModalProps) => {
 };
 
 const PlayerDetail = (props: PlayerDetailProps) => {
-  const { side, isWon, data, chance, status } = props;
+  const { side, isWon, data, chance, status, isEndCoinFlip } = props;
   const [total, setTotal] = createSignal(0);
-  const [isEndCoinFlip, setIsEndCoinFlip] = createSignal(false);
 
   onMount(() => {
     // convert cent to dollar
     if (data && data.items)
       setTotal(
-        data.items.reduce((t, b) => {
-          return (t += b[1]);
+        data.items.reduce((total, item) => {
+          return (total += item[1]);
         }, 0) / 20
       );
-
-    setTimeout(() => setIsEndCoinFlip(true), 3000);
   });
 
   return (
@@ -312,16 +340,21 @@ const ItemDetail = (props: ItemDetailProps) => {
 
 const CoinFlip = (props: CoinFlipProps) => {
   const { winner_side } = props;
-  const [start, setStart] = createSignal(false);
+  const [isStart, setIsStart] = createSignal(false);
   const [isEnd, setIsEnd] = createSignal(false);
 
   onMount(() => {
-    setTimeout(() => setStart(true), 500);
-    setTimeout(() => setIsEnd(true), 3501);
+    const startTimeout = setTimeout(() => setIsStart(true), 300);
+    const endTimeout = setTimeout(() => setIsEnd(true), 3320);
+
+    onCleanup(() => {
+      clearTimeout(startTimeout);
+      clearTimeout(endTimeout);
+    });
   });
 
   return (
-    <Show when={start()}>
+    <Show when={isStart()}>
       <div
         classList={{
           b_2_p: winner_side === "blue",

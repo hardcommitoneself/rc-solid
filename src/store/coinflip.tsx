@@ -41,7 +41,6 @@ type CoinFlipGame = {
 
 type CoinFlipState = {
   current: CoinFlipGame[];
-  history: CoinFlipGame[];
 };
 
 // actions
@@ -198,7 +197,6 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
         },
       },
     ],
-    history: [],
   }),
 
   actions: (set, get) => ({
@@ -264,7 +262,7 @@ const [CoinFlipProvider, useCoinFlipContext] = createStore<
           {
             ...game,
             status: CoinFlipGameStatus.WAITING,
-            timer: new Date().getTime() / 1000 + 100,
+            timer: new Date().getTime() / 1000 + 90,
             ...other,
           },
           ...get.current.slice(index + 1, get.current.length),

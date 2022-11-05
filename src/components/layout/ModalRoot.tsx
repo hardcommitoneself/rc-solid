@@ -1,5 +1,5 @@
 import { createMemo } from "solid-js";
-import { useModalContext } from "src/store/modal";
+import { useModalContext, CoinFlipModal } from "src/store/modal";
 
 // modals
 import { JackpotModal, CoinflipModal } from "~components/modals";
@@ -19,7 +19,7 @@ const ModalRoot = () => {
 
     const Modal = mapModals[state.modal.name];
 
-    return <Modal {...state.modal} />;
+    return <Modal {...(state.modal as any)} />;
   });
 
   return <>{modal()}</>;

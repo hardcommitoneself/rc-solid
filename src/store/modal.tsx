@@ -1,18 +1,11 @@
 import { createStore } from "solid-utils";
-
-import { createMutable } from "solid-js/store";
-
-export enum ModalName {
-  COIN_FLIP = "coinflip",
-  JACKPOT = "jackpot",
-}
 interface CoinFlipModal {
-  name: ModalName;
+  name: "coinflip";
   gameid?: number;
 }
 
 interface JackpotModal {
-  name: ModalName;
+  name: "jackpot";
 }
 
 type Modal = CoinFlipModal | JackpotModal;
@@ -41,4 +34,4 @@ const [ModalProvider, useModalContext] = createStore<ModalState, Actions, {}>({
 });
 
 export { ModalProvider, useModalContext };
-export type { CoinFlipModal };
+export type { CoinFlipModal, Modal, JackpotModal };

@@ -5,9 +5,12 @@ type ColorSchemeType = "orange" | "green";
 
 type VariantType = "outline" | "solid";
 
+type SizeType = "sm" | "md";
+
 interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   colorScheme?: ColorSchemeType;
   variant?: VariantType;
+  size?: SizeType;
   disabled?: boolean;
   loading?: boolean;
 }
@@ -34,10 +37,16 @@ const variants = {
     "border-2 border-gray-500 !bg-none hover:!bg-gradient-to-b hover:border-none hover:px-4.5",
 };
 
+const sizes = {
+  md: "h-11 text-base",
+  sm: "h-9 text-sm",
+};
+
 const StylizedButton = (props: ButtonProps) => {
   const {
     colorScheme = "green",
     variant = "solid",
+    size = "md",
     disabled = false,
     loading = false,
     children,
@@ -46,8 +55,9 @@ const StylizedButton = (props: ButtonProps) => {
 
   return (
     <button
-      class="relative max-w-fit inline-flex items-center justify-center whitespace-nowrap align-middle select-none px-4 h-11 border-b-2 rounded-bl rounded-tr w-full text-sm text-white font-semibold uppercase tracking-wide"
+      class="relative max-w-fit inline-flex items-center justify-center whitespace-nowrap align-middle select-none px-4 border-b-2 rounded-bl rounded-tr w-full text-white font-semibold uppercase tracking-wide"
       classList={{
+        [sizes[size]]: true,
         [colorSchemes[colorScheme].bgColor]: true,
         [colorSchemes[colorScheme].borderColor]: true,
         [variants[variant]]: true,

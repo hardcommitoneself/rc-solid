@@ -3,7 +3,6 @@ import { createSignal, For, createEffect, onCleanup } from "solid-js";
 import { Title } from "solid-meta";
 import { useUserContext } from "src/store/user";
 import { useCoinFlipContext } from "src/store/coinflip";
-import { SiteItem } from "src/store/items";
 import createDebounce from "@solid-primitives/debounce";
 import { StylizedButton } from "~components/ui/Button";
 
@@ -42,40 +41,41 @@ const Coinflip = () => {
   const [t] = useI18n();
   const [state] = useCoinFlipContext();
 
-  const [maxLen, setMaxLen] = createSignal(0);
+  const [maxNumberOfDisplaybleItems, setMaxNumberOfDisplayableItems] =
+    createSignal(0);
 
   const setWindowSize = () => {
     if (window.innerWidth > 1600) {
-      setMaxLen(6);
+      setMaxNumberOfDisplayableItems(6);
       return;
     }
     if (window.innerWidth > 1280) {
-      setMaxLen(4);
+      setMaxNumberOfDisplayableItems(4);
       return;
     }
     if (window.innerWidth > 960) {
-      setMaxLen(2);
+      setMaxNumberOfDisplayableItems(2);
       return;
     }
     if (window.innerWidth < 800) {
-      setMaxLen(4);
+      setMaxNumberOfDisplayableItems(4);
       return;
     }
     if (window.innerWidth < 960) {
-      setMaxLen(6);
+      setMaxNumberOfDisplayableItems(6);
       return;
     }
   };
 
-  const debounceWindowSize = createDebounce(setWindowSize, 200);
+  const debounceSetWindowSize = createDebounce(setWindowSize, 200);
 
   createEffect(() => {
     setWindowSize();
-    window.addEventListener("resize", debounceWindowSize);
+    window.addEventListener("resize", debounceSetWindowSize);
   });
 
   onCleanup(async () => {
-    window.removeEventListener("resize", debounceWindowSize);
+    window.removeEventListener("resize", debounceSetWindowSize);
   });
 
   return (
@@ -98,7 +98,10 @@ const Coinflip = () => {
       <div class="flex flex-col gap-5 p-4">
         <For each={state.current}>
           {(game, index) => (
-            <GameListItem data={game} maxLen={maxLen}></GameListItem>
+            <GameListItem
+              data={game}
+              maxLen={maxNumberOfDisplaybleItems}
+            ></GameListItem>
           )}
         </For>
       </div>
