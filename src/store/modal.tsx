@@ -1,7 +1,7 @@
 import { createStore } from "solid-utils";
 interface CoinFlipModal {
   name: "coinflip";
-  gameid?: number;
+  gameid: number;
 }
 
 interface JackpotModal {
