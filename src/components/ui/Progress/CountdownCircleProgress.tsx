@@ -49,7 +49,7 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
 
   onMount(() => {
     const canvas = canvasRef();
-    const c = canvas?.getContext("2d");
+    const ctx = canvas?.getContext("2d");
 
     const scale = window?.devicePixelRatio;
 
@@ -58,7 +58,7 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
       canvas.height = canvas?.height * scale;
     }
 
-    c?.scale(scale, scale);
+    ctx?.scale(scale, scale);
 
     const width = canvas?.width || 0;
     const height = canvas?.height || 0;
@@ -66,8 +66,8 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
     const posX = width / 2;
     const posY = height / 2;
 
-    if (c) {
-      c.lineCap = "round";
+    if (ctx) {
+      ctx.lineCap = "round";
     }
 
     let degree = 360;
@@ -84,22 +84,22 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
     const arcMove = () => {
       current_timestamp = new Date().getTime();
 
-      if (c) {
+      if (ctx) {
         degree =
           ((360 * (endTimestamp - startTimestamp)) /
             (1000 * (variant === "orange" ? 90 : 10))) *
           ((endTimestamp - current_timestamp) / diff);
-        c.clearRect(0, 0, width, height);
+        ctx.clearRect(0, 0, width, height);
         const timingCountText = Math.ceil(
           (endTimestamp - current_timestamp) / 1000
         ).toString();
-        c.font = sizes[size].text;
-        c.fillStyle = variants[variant].stroke[200];
-        c.textAlign = "center";
-        c.fillText(timingCountText, posX, posY + 7);
+        ctx.font = sizes[size].text;
+        ctx.fillStyle = variants[variant].stroke[200];
+        ctx.textAlign = "center";
+        ctx.fillText(timingCountText, posX, posY + 7);
 
-        c.beginPath();
-        c.arc(
+        ctx.beginPath();
+        ctx.arc(
           posX,
           posY,
           sizes[size].radius,
@@ -107,14 +107,14 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
           (Math.PI / 180) * (270 + 360),
           false
         );
-        c.strokeStyle = variants[variant].stroke[100];
-        c.lineWidth = sizes[size].lineWidth;
-        c.stroke();
+        ctx.strokeStyle = variants[variant].stroke[100];
+        ctx.lineWidth = sizes[size].lineWidth;
+        ctx.stroke();
 
-        c.beginPath();
-        c.strokeStyle = variants[variant].stroke[200];
-        c.lineWidth = sizes[size].lineWidth;
-        c.arc(
+        ctx.beginPath();
+        ctx.strokeStyle = variants[variant].stroke[200];
+        ctx.lineWidth = sizes[size].lineWidth;
+        ctx.arc(
           posX,
           posY,
           sizes[size].radius,
@@ -122,7 +122,7 @@ const CountdownCircleProgress = (props: CountdownCircleProgressProps) => {
           (Math.PI / 180) * (270 + degree),
           false
         );
-        c.stroke();
+        ctx.stroke();
       }
 
       frame = requestAnimationFrame(arcMove);

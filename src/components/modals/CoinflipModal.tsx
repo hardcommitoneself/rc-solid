@@ -49,7 +49,6 @@ const CoinflipModal = (props: CoinflipModalProps) => {
   const { gameid } = props;
   const [coinflipState, coinflipActions] = useCoinFlipContext();
   const [modalState, modalActions] = useModalContext();
-  const [showMetaData, setShowMetaData] = createSignal(false);
   const [isEndCoinFlip, setIsEndCoinFlip] = createSignal(false);
 
   const coinflipGameData = coinflipActions.getCoinflipDataById(
@@ -65,18 +64,20 @@ const CoinflipModal = (props: CoinflipModalProps) => {
   // chance
   let totalPriceOfRed = 0;
   let totalPriceOfBlue = 0;
-  if (coinflipGameData.red_side && coinflipGameData.red_side.items)
-    totalPriceOfRed = coinflipGameData.red_side.items?.reduce((total, item) => {
+  if (coinflipGameData.red_side && coinflipGameData.red_side.items) {
+    totalPriceOfRed = coinflipGameData.red_side.items.reduce((total, item) => {
       return (total += item[1]);
     }, 0);
+  }
 
-  if (coinflipGameData.blue_side && coinflipGameData.blue_side.items)
+  if (coinflipGameData.blue_side && coinflipGameData.blue_side.items) {
     totalPriceOfBlue = coinflipGameData.blue_side.items.reduce(
       (total, item) => {
         return (total += item[1]);
       },
       0
     );
+  }
 
   const chanceOfBlue =
     (totalPriceOfBlue / (totalPriceOfRed + totalPriceOfBlue)) * 100;
@@ -85,7 +86,6 @@ const CoinflipModal = (props: CoinflipModalProps) => {
 
   onMount(() => {
     const timeout = setTimeout(() => {
-      setShowMetaData(true);
       setIsEndCoinFlip(true);
     }, 3500);
 
@@ -181,7 +181,7 @@ const CoinflipModal = (props: CoinflipModalProps) => {
             {/* should delay while coin flipping */}
             <Show
               when={
-                showMetaData() &&
+                isEndCoinFlip() &&
                 coinflipGameData.status === CoinFlipGameStatus.FINISHED
               }
             >
@@ -212,12 +212,13 @@ const PlayerDetail = (props: PlayerDetailProps) => {
 
   onMount(() => {
     // convert cent to dollar
-    if (data && data.items)
+    if (data && data.items) {
       setTotal(
         data.items.reduce((total, item) => {
           return (total += item[1]);
         }, 0) / 20
       );
+    }
   });
 
   return (
@@ -327,7 +328,11 @@ const ItemDetail = (props: ItemDetailProps) => {
       <td class="flex items-center justify-center px-2 py-1 align-middle text-sm text-left">
         <img
           class="w-20 h-12.5"
-          src={`${ITEM_IMAGE_URL}/${item?.image}/80fx50f`}
+          src={`${
+            item
+              ? `${ITEM_IMAGE_URL}/${item?.image}/80fx50f`
+              : "/src/assets/images/item/unknown.png"
+          }`}
         />
       </td>
 

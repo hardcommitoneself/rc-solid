@@ -19,7 +19,7 @@ type CoinType = "blue" | "red";
 type CoinPosType = "tr" | "tl" | "br" | "bl";
 type AvatarSizeType = "md" | "sm";
 
-type ItemBackgroundImageType = "f15840" | "a7ec2e" | "35a3f1";
+type ItemBackgroundImageType = "f15840" | "a7ec2e" | "35a3f1" | "unknown";
 
 interface GameListItemProps {
   data: CoinFlipGame;
@@ -41,7 +41,7 @@ interface CoinProps {
 interface PriceCardProps {
   totalPrice: Accessor<number>;
   diff: number;
-  isFinished: boolean;
+  isFinished: Accessor<boolean>;
 }
 
 interface ItemProps {
@@ -58,6 +58,7 @@ const ItemBGImages = {
   f15840: "bg-item-f15840",
   a7ec2e: "bg-item-a7ec2e",
   "35a3f1": "bg-item-35a3f1",
+  unknown: "bg-item-unknown",
 };
 
 const GameListItem = (props: GameListItemProps) => {
@@ -65,6 +66,7 @@ const GameListItem = (props: GameListItemProps) => {
   const [items, setItems] = createSignal<SiteItem[]>([]);
   const [restLen, setRestLen] = createSignal(0);
   const [totalPrice, setTotalPrice] = createSignal(0);
+  const [isFinished, setIsFinished] = createSignal(false);
   const [, actions] = useModalContext();
 
   createEffect(() => {
@@ -87,6 +89,11 @@ const GameListItem = (props: GameListItemProps) => {
       ].reduce((total, item) => {
         return total + item[1];
       }, 0) / 20
+    );
+
+    setIsFinished(
+      data.status === CoinFlipGameStatus.FINISHED ||
+        data.status === CoinFlipGameStatus.JOINED
     );
   });
 
@@ -170,18 +177,19 @@ const GameListItem = (props: GameListItemProps) => {
           <PriceCard
             totalPrice={totalPrice}
             diff={data.diff as number}
-            isFinished={
-              data.status === CoinFlipGameStatus.FINISHED ||
-              data.status === CoinFlipGameStatus.JOINED
-            }
+            isFinished={isFinished}
           />
           {/* status */}
           <div class="flex items-center justify-center">
             <Show when={data.status === CoinFlipGameStatus.FINISHED}>
               <Avatar
-                id={data.red_side?.avatar}
+                id={
+                  data.winner_side === "red"
+                    ? data.red_side?.avatar
+                    : data.blue_side?.avatar
+                }
                 hasCoinBadge={true}
-                side="red"
+                side={data.winner_side}
                 pos="tl"
                 size="sm"
               />
@@ -296,7 +304,7 @@ const PriceCard = (props: PriceCardProps) => {
   return (
     <div class="flex flex-col justify-center items-center whitespace-nowrap">
       <span class="text-sm font-semibold leading-loose">$ {totalPrice()}</span>
-      <Show when={!isFinished}>
+      <Show when={!isFinished()}>
         <span class="text-xs text-site-330">
           {((totalPrice() * (100 - diff)) / 100).toFixed(2)} -{" "}
           {((totalPrice() * (100 + diff)) / 100).toFixed(2)}
@@ -311,7 +319,8 @@ const Item = (props: ItemProps) => {
   const [isTooltipShow, setIsTooltipShow] = createSignal(false);
 
   const item = getItemModel(id);
-  const itemBG = ItemBGImages[item?.color as ItemBackgroundImageType];
+  const itemBG =
+    ItemBGImages[item ? (item.color as ItemBackgroundImageType) : "unknown"];
 
   return (
     <div
@@ -320,8 +329,12 @@ const Item = (props: ItemProps) => {
       onMouseLeave={() => setIsTooltipShow(false)}
     >
       <div class="w-full h-ful flex flex-col items-center justify-center">
-        <img src={`${ITEM_IMAGE_URL}/${item?.image}/80fx50f`} />
-        <span class="text-xs leading-3">${price / 20}</span>
+        <Show when={item}>
+          <img src={`${ITEM_IMAGE_URL}/${item?.image}/80fx50f`} />
+        </Show>
+        <span class="text-xs leading-3" classList={{ "mt-8": !item }}>
+          ${price / 20}
+        </span>
       </div>
 
       {/* tooltip */}

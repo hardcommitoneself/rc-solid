@@ -53,6 +53,7 @@ module.exports = {
         "item-f15840": "url('/src/assets/images/item/f15840.png')",
         "item-a7ec2e": "url('/src/assets/images/item/a7ec2e.png')",
         "item-35a3f1": "url('/src/assets/images/item/35a3f1.png')",
+        "item-unknown": "url('/src/assets/images/item/unknown.png')",
         "coin-red": "url('/src/assets/images/coin/red_side.png')",
         "coin-blue": "url('/src/assets/images/coin/blue_side.png')",
       },

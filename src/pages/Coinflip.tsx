@@ -5,6 +5,13 @@ import { useUserContext } from "src/store/user";
 import { useCoinFlipContext } from "src/store/coinflip";
 import createDebounce from "@solid-primitives/debounce";
 import { StylizedButton } from "~components/ui/Button";
+import {
+  CoinFlipGame,
+  CoinFlipGameStatus,
+  CoinFlipGameWaiting,
+  CoinFlipGameJoined,
+  CoinFlipGameFinished,
+} from "src/store/coinflip";
 
 // components
 import { Stats, Actions, GameListItem } from "~components/coinflip";
@@ -25,15 +32,118 @@ const Debug = () => {
     incrementBalance(365);
   }
 
+  function createGame() {
+    const newGame: CoinFlipGame = {
+      id: 6727141,
+      status: CoinFlipGameStatus.JOINABLE,
+      time_left: 1667593412,
+      value: 556,
+      owner: "76561198190685382",
+      initial_value: 556,
+      hash: "655e482ff7f79f8c43e1e50850ba0ba59f69b637f6f0373559b81c40a16c10bf",
+      diff: 10,
+      blue_side: {
+        id: 117475,
+        avatar: "650158753d392ec232546fd5b7b29723dfa67c9f",
+        level: Math.floor(Math.random() * 90 + 1),
+        name: "Prorere #****",
+        steamid: "76561198190685382",
+        items: [
+          [3535, 172],
+          [2545, 115],
+        ],
+      },
+    };
+
+    createNewGame(newGame);
+  }
+
+  function waitGame() {
+    const waitingData: CoinFlipGameWaiting = {
+      id: 6727141,
+      status: CoinFlipGameStatus.WAITING,
+      timer: 1667740569,
+      red_side: {
+        id: 92308,
+        avatar: "3a341435afd82d6ff7d232376f38f6c66fe6e71c",
+        level: Math.floor(Math.random() * 90 + 1),
+        name: "Ko3eY #**** #****",
+        steamid: "76561198340183346",
+      },
+    };
+
+    waiting(waitingData);
+  }
+
+  function joinGame() {
+    const joinData: CoinFlipGameJoined = {
+      id: 6727141,
+      status: CoinFlipGameStatus.JOINED,
+      time_left: 1667593412,
+      value: 556,
+      owner: "76561198190685382",
+      initial_value: 556,
+      hash: "655e482ff7f79f8c43e1e50850ba0ba59f69b637f6f0373559b81c40a16c10bf",
+      diff: 10,
+      blue_side: {
+        id: 117475,
+        avatar: "650158753d392ec232546fd5b7b29723dfa67c9f",
+        level: Math.floor(Math.random() * 90 + 1),
+        name: "Prorere #****",
+        steamid: "76561198190685382",
+        items: [
+          [3535, 172],
+          [2545, 115],
+        ],
+      },
+      red_side: {
+        id: 92308,
+        avatar: "3a341435afd82d6ff7d232376f38f6c66fe6e71c",
+        level: Math.floor(Math.random() * 90 + 1),
+        name: "Ko3eY #**** #****",
+        steamid: "76561198340183346",
+        items: [
+          [3797, 57],
+          [3021, 50],
+          [3021, 50],
+          [3021, 50],
+        ],
+      },
+    };
+
+    joined(joinData);
+  }
+
+  function finishGame() {
+    const finishData: CoinFlipGameFinished = {
+      id: 6727141,
+      mod: "PVYOvqFFi3-b%k(ONCnfH$yOB#qpxdn",
+      secret: "PVYOvqFFi3",
+      seed: "b%k(ONCnfH$yOB#qpxdn",
+      serialNumber: 7930965,
+      status: CoinFlipGameStatus.FINISHED,
+      ticketNumber: 56,
+      winner_side: "blue",
+    };
+
+    finish(finishData);
+  }
+
+  function removeGame() {
+    const removeData = {
+      data: 6727141,
+    };
+
+    remove(removeData.data);
+  }
+
   return (
     <div class="flex gap-1">
-      <StylizedButton onClick={() => createNewGame(400000)}>
-        Create
-      </StylizedButton>
-      <StylizedButton onClick={() => waiting(400000)}>Waiting</StylizedButton>
-      <StylizedButton onClick={() => joined(400000)}>Join</StylizedButton>
-      <StylizedButton onClick={() => finish(400000)}>Finish</StylizedButton>
-      <StylizedButton onClick={() => remove(400000)}>Remove</StylizedButton>
+      <StylizedButton onClick={createGame}>Create</StylizedButton>
+      <StylizedButton onClick={waitGame}>Waiting</StylizedButton>
+      <StylizedButton onClick={joinGame}>Join</StylizedButton>
+      <StylizedButton onClick={finishGame}>Finish</StylizedButton>
+      <StylizedButton onClick={removeGame}>Remove</StylizedButton>
     </div>
   );
 };
